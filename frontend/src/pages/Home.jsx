@@ -3,6 +3,7 @@ import Hero from '../components/herosection/Hero';
 import { useProducts } from '../contexts/ProductContext';
 import { getActiveCategoriesWithProducts } from '../config/categoryConfig';
 import { FaShare, FaStar } from 'react-icons/fa';
+import { Link } from 'react-router-dom';
 
 const Home = () => {
   const { products, loading, error } = useProducts();
@@ -106,8 +107,8 @@ const Home = () => {
                   <span className="text-2xl">🎨</span>
                 </div>
                 <div>
-                  <h3 className="text-xl font-bold text-gray-900">UI/UX Design</h3>
-                  <p className="text-gray-500 text-sm">UI/UX Design</p>
+                  <h3 className="text-xl font-bold text-gray-900">Graphic Design</h3>
+                  <p className="text-gray-500 text-sm">Graphic Design</p>
                 </div>
               </div>
             </div>
@@ -145,7 +146,7 @@ const Home = () => {
                   <span className="text-2xl">📊</span>
                 </div>
                 <div>
-                  <h3 className="text-xl font-bold text-gray-900">SEO Services</h3>
+                  <h3 className="text-xl font-bold text-gray-900">Websites</h3>
                   <p className="text-gray-500 text-sm">45 Services</p>
                 </div>
               </div>
@@ -167,9 +168,11 @@ const Home = () => {
 
           {/* View All Button */}
           <div className="text-center">
+            <Link to="/services">
             <button className="bg-pink-500 hover:bg-pink-600 text-white px-8 py-3 rounded-full font-semibold shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300">
               View All Categories
             </button>
+            </Link>
           </div>
         </div>
       </section>
