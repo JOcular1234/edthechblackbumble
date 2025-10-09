@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { API_BASE_URL } from '../config/api';
 
 const AdminSignin = () => {
   const [formData, setFormData] = useState({
@@ -28,7 +29,7 @@ const AdminSignin = () => {
     setSuccess('');
 
     try {
-      const response = await axios.post('http://localhost:5000/api/auth/signin', formData);
+      const response = await axios.post(`${API_BASE_URL}/api/auth/signin`, formData);
       
       if (response.data.success) {
         setSuccess('Signin successful!');

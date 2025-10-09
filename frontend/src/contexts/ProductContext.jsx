@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import axios from 'axios';
+import { API_BASE_URL } from '../config/api';
 
 const ProductContext = createContext();
 
@@ -32,7 +33,7 @@ export const ProductProvider = ({ children }) => {
   const fetchProductsByCategory = async (category, activeOnly = true) => {
     try {
       const response = await axios.get(
-        `http://localhost:5000/api/products?category=${category}&active=${activeOnly}`
+        `${API_BASE_URL}/api/products?category=${category}&active=${activeOnly}`
       );
       
       if (response.data.success) {

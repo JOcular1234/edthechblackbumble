@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useProducts } from '../../contexts/ProductContext';
+import { API_BASE_URL } from '../../config/api';
 
 const ProductManagement = () => {
   const { refreshAllProducts } = useProducts();
@@ -62,7 +63,7 @@ const ProductManagement = () => {
   const fetchProducts = async () => {
     try {
       setLoading(true);
-      const response = await axios.get('http://localhost:5000/api/products?active=false');
+      const response = await axios.get(`${API_BASE_URL}/api/products?active=false`);
       
       if (response.data.success) {
         setProducts(response.data.data.products);
@@ -193,13 +194,13 @@ const ProductManagement = () => {
       let response;
       if (editingProduct) {
         response = await axios.put(
-          `http://localhost:5000/api/products/${editingProduct._id}`,
+          `${API_BASE_URL}/api/products/${editingProduct._id}`,
           formDataToSend,
           config
         );
       } else {
         response = await axios.post(
-          'http://localhost:5000/api/products',
+          `${API_BASE_URL}/api/products`,
           formDataToSend,
           config
         );
@@ -251,7 +252,7 @@ const ProductManagement = () => {
       };
 
       const response = await axios.delete(
-        `http://localhost:5000/api/products/${productId}`,
+        `${API_BASE_URL}/api/products/${productId}`,
         config
       );
 
@@ -273,7 +274,7 @@ const ProductManagement = () => {
       };
 
       const response = await axios.patch(
-        `http://localhost:5000/api/products/${productId}/toggle-popular`,
+        `${API_BASE_URL}/api/products/${productId}/toggle-popular`,
         {},
         config
       );
@@ -296,7 +297,7 @@ const ProductManagement = () => {
       };
 
       const response = await axios.patch(
-        `http://localhost:5000/api/products/${productId}/toggle-active`,
+        `${API_BASE_URL}/api/products/${productId}/toggle-active`,
         {},
         config
       );
