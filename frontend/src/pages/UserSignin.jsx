@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useUserAuth } from '../contexts/UserAuthContext';
+import DisabledAccount from '../components/user/DisabledAccount';
 
 const UserSignin = () => {
   const [formData, setFormData] = useState({
@@ -11,6 +12,7 @@ const UserSignin = () => {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
   const [rememberMe, setRememberMe] = useState(false);
+  const [disabledUser, setDisabledUser] = useState(null);
   const navigate = useNavigate();
   const { signin } = useUserAuth();
 
@@ -45,6 +47,14 @@ const UserSignin = () => {
         setTimeout(() => {
           navigate('/user/dashboard');
         }, 1000);
+      } else if (result.disabled) {
+        // Handle disabled account
+        setDisabledUser({
+          firstName: formData.email.split('@')[0], // Fallback name
+          disabledReason: result.disabledData.reason,
+          disabledAt: result.disabledData.disabledAt,
+          _id: 'disabled-user'
+        });
       } else {
         setError(result.message || 'Signin failed. Please try again.');
       }
@@ -55,6 +65,11 @@ const UserSignin = () => {
       setLoading(false);
     }
   };
+
+  // Show disabled account screen if user is disabled
+  if (disabledUser) {
+    return <DisabledAccount user={disabledUser} />;
+  }
 
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">

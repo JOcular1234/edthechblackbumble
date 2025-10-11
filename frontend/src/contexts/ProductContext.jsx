@@ -2,8 +2,11 @@ import React, { createContext, useContext, useState, useEffect } from 'react';
 import axios from 'axios';
 import { API_BASE_URL } from '../config/api';
 
+// Create the context
 const ProductContext = createContext();
 
+// Custom hook to use the ProductContext
+// eslint-disable-next-line react-refresh/only-export-components
 export const useProducts = () => {
   const context = useContext(ProductContext);
   if (!context) {
@@ -95,7 +98,7 @@ export const ProductProvider = ({ children }) => {
 
   useEffect(() => {
     fetchAllProducts(true);
-  }, []);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const value = {
     products,

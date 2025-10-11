@@ -17,6 +17,7 @@ import AdminDashboard from './pages/AdminDashboard';
 import UserSignup from './pages/UserSignup';
 import UserSignin from './pages/UserSignin';
 import UserDashboard from './pages/UserDashboard';
+import Notifications from './pages/Notifications';
 import Checkout from './pages/Checkout';
 import CheckoutSuccess from './pages/CheckoutSuccess';
 import Footer from './components/footer/Footer';
@@ -54,6 +55,11 @@ function App() {
             <Route path="/user/dashboard" element={
               <ProtectedRoute requireAuth={true}>
                 <UserDashboard />
+              </ProtectedRoute>
+            } />
+            <Route path="/notifications" element={
+              <ProtectedRoute requireAuth={true}>
+                <Notifications />
               </ProtectedRoute>
             } />
             <Route path="/checkout/:serviceId" element={

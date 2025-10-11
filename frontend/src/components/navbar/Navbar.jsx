@@ -1,14 +1,19 @@
 import React, { useState, useEffect } from 'react';
-import { Menu, X, ChevronDown, Phone, Mail, User, LogOut } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Menu, X, ChevronDown, Phone, Mail, User, LogOut, Settings } from 'lucide-react';
+import { FaBell } from 'react-icons/fa';
+import { Link, useNavigate } from 'react-router-dom';
 import { useUserAuth } from '../../contexts/UserAuthContext';
+import NotificationBell from '../notifications/NotificationBell';
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState(null);
   const [userDropdown, setUserDropdown] = useState(false);
+  const [adminData, setAdminData] = useState(null);
+  const [isAdminAuthenticated, setIsAdminAuthenticated] = useState(false);
   const { user, isAuthenticated, signout, loading } = useUserAuth();
+  const navigate = useNavigate();
 
   // Handle scroll effect
   useEffect(() => {
@@ -17,6 +22,35 @@ const Navbar = () => {
     };
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  // Check for admin authentication
+  useEffect(() => {
+    const checkAdminAuth = () => {
+      const adminToken = localStorage.getItem('adminToken');
+      const adminDataStr = localStorage.getItem('adminData');
+      
+      if (adminToken && adminDataStr) {
+        try {
+          const parsedAdminData = JSON.parse(adminDataStr);
+          setAdminData(parsedAdminData);
+          setIsAdminAuthenticated(true);
+        } catch (error) {
+          console.error('Error parsing admin data:', error);
+          setIsAdminAuthenticated(false);
+          setAdminData(null);
+        }
+      } else {
+        setIsAdminAuthenticated(false);
+        setAdminData(null);
+      }
+    };
+
+    checkAdminAuth();
+    
+    // Listen for storage changes (when admin signs in/out in another tab)
+    window.addEventListener('storage', checkAdminAuth);
+    return () => window.removeEventListener('storage', checkAdminAuth);
   }, []);
 
   const navItems = [
@@ -29,6 +63,16 @@ const Navbar = () => {
 
   const toggleDropdown = (index) => {
     setActiveDropdown(activeDropdown === index ? null : index);
+  };
+
+  const handleAdminSignout = () => {
+    localStorage.removeItem('adminToken');
+    localStorage.removeItem('adminRefreshToken');
+    localStorage.removeItem('adminData');
+    setIsAdminAuthenticated(false);
+    setAdminData(null);
+    setUserDropdown(false);
+    navigate('/');
   };
 
   return (
@@ -108,20 +152,30 @@ const Navbar = () => {
           {/* Contact Info & CTA */}
           <div className="hidden lg:flex items-center space-x-4">
             {!loading && (
-              isAuthenticated ? (
-                <div className="relative">
+              (isAuthenticated || isAdminAuthenticated) ? (
+                <div className="flex items-center space-x-4">
+                  {/* Notification Bell - Only show for regular users, not admins */}
+                  {!isAdminAuthenticated && <NotificationBell />}
+                  
+                  {/* User Dropdown */}
+                  <div className="relative">
                   <button
                     onClick={() => setUserDropdown(!userDropdown)}
                     className={`flex items-center space-x-2 px-3 py-2 rounded-lg font-medium transition-all duration-300 hover:bg-white/10 ${
                       isScrolled ? 'text-gray-700 hover:text-indigo-600' : 'text-white'
                     }`}
                   >
-                    <div className="w-8 h-8 bg-indigo-600 rounded-full flex items-center justify-center">
+                    <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
+                      isAdminAuthenticated ? 'bg-red-600' : 'bg-indigo-600'
+                    }`}>
                       <span className="text-white text-sm font-medium">
-                        {user?.firstName?.charAt(0)}{user?.lastName?.charAt(0)}
+                        {isAdminAuthenticated 
+                          ? (adminData?.username?.charAt(0)?.toUpperCase() || 'A')
+                          : `${user?.firstName?.charAt(0)}${user?.lastName?.charAt(0)}`
+                        }
                       </span>
                     </div>
-                    <span>{user?.firstName}</span>
+                    <span>{isAdminAuthenticated ? adminData?.username : user?.firstName}</span>
                     <ChevronDown className={`w-4 h-4 transition-transform duration-300 ${
                       userDropdown ? 'rotate-180' : ''
                     }`} />
@@ -135,28 +189,69 @@ const Navbar = () => {
                   }`}>
                     <div className="py-2">
                       <div className="px-4 py-3 border-b border-gray-200/50">
-                        <p className="text-sm font-medium text-gray-900">{user?.fullName}</p>
-                        <p className="text-xs text-gray-500">{user?.email}</p>
+                        {isAdminAuthenticated ? (
+                          <>
+                            <p className="text-sm font-medium text-gray-900">{adminData?.username}</p>
+                            <p className="text-xs text-red-500">Administrator</p>
+                          </>
+                        ) : (
+                          <>
+                            <p className="text-sm font-medium text-gray-900">{user?.fullName}</p>
+                            <p className="text-xs text-gray-500">{user?.email}</p>
+                          </>
+                        )}
                       </div>
-                      <Link
-                        to="/user/dashboard"
-                        className="flex items-center space-x-2 px-4 py-3 text-gray-700 hover:bg-indigo-50 hover:text-indigo-600 transition-colors duration-200"
-                        onClick={() => setUserDropdown(false)}
-                      >
-                        <User className="w-4 h-4" />
-                        <span>Dashboard</span>
-                      </Link>
-                      <button
-                        onClick={() => {
-                          signout();
-                          setUserDropdown(false);
-                        }}
-                        className="flex items-center space-x-2 w-full px-4 py-3 text-gray-700 hover:bg-red-50 hover:text-red-600 transition-colors duration-200"
-                      >
-                        <LogOut className="w-4 h-4" />
-                        <span>Sign Out</span>
-                      </button>
+                      
+                      {isAdminAuthenticated ? (
+                        <>
+                          <Link
+                            to="/admin/dashboard"
+                            className="flex items-center space-x-2 px-4 py-3 text-gray-700 hover:bg-red-50 hover:text-red-600 transition-colors duration-200"
+                            onClick={() => setUserDropdown(false)}
+                          >
+                            <Settings className="w-4 h-4" />
+                            <span>Admin Dashboard</span>
+                          </Link>
+                          <button
+                            onClick={handleAdminSignout}
+                            className="flex items-center space-x-2 w-full px-4 py-3 text-gray-700 hover:bg-red-50 hover:text-red-600 transition-colors duration-200"
+                          >
+                            <LogOut className="w-4 h-4" />
+                            <span>Sign Out</span>
+                          </button>
+                        </>
+                      ) : (
+                        <>
+                          <Link
+                            to="/user/dashboard"
+                            className="flex items-center space-x-2 px-4 py-3 text-gray-700 hover:bg-indigo-50 hover:text-indigo-600 transition-colors duration-200"
+                            onClick={() => setUserDropdown(false)}
+                          >
+                            <User className="w-4 h-4" />
+                            <span>Dashboard</span>
+                          </Link>
+                          <Link
+                            to="/notifications"
+                            className="flex items-center space-x-2 px-4 py-3 text-gray-700 hover:bg-indigo-50 hover:text-indigo-600 transition-colors duration-200"
+                            onClick={() => setUserDropdown(false)}
+                          >
+                            <FaBell className="w-4 h-4" />
+                            <span>Notifications</span>
+                          </Link>
+                          <button
+                            onClick={() => {
+                              signout();
+                              setUserDropdown(false);
+                            }}
+                            className="flex items-center space-x-2 w-full px-4 py-3 text-gray-700 hover:bg-red-50 hover:text-red-600 transition-colors duration-200"
+                          >
+                            <LogOut className="w-4 h-4" />
+                            <span>Sign Out</span>
+                          </button>
+                        </>
+                      )}
                     </div>
+                  </div>
                   </div>
                 </div>
               ) : (
@@ -247,37 +342,79 @@ const Navbar = () => {
             {/* Mobile Contact & CTA */}
             <div className="px-4 py-3 border-t border-gray-200/50 space-y-3">
               {!loading && (
-                isAuthenticated ? (
+                (isAuthenticated || isAdminAuthenticated) ? (
                   <div className="space-y-3">
-                    <div className="flex items-center space-x-3 p-3 bg-indigo-50 rounded-lg">
-                      <div className="w-10 h-10 bg-indigo-600 rounded-full flex items-center justify-center">
+                    <div className={`flex items-center space-x-3 p-3 rounded-lg ${
+                      isAdminAuthenticated ? 'bg-red-50' : 'bg-indigo-50'
+                    }`}>
+                      <div className={`w-10 h-10 rounded-full flex items-center justify-center ${
+                        isAdminAuthenticated ? 'bg-red-600' : 'bg-indigo-600'
+                      }`}>
                         <span className="text-white text-sm font-medium">
-                          {user?.firstName?.charAt(0)}{user?.lastName?.charAt(0)}
+                          {isAdminAuthenticated 
+                            ? (adminData?.username?.charAt(0)?.toUpperCase() || 'A')
+                            : `${user?.firstName?.charAt(0)}${user?.lastName?.charAt(0)}`
+                          }
                         </span>
                       </div>
                       <div>
-                        <p className="text-sm font-medium text-gray-900">{user?.fullName}</p>
-                        <p className="text-xs text-gray-500">{user?.email}</p>
+                        {isAdminAuthenticated ? (
+                          <>
+                            <p className="text-sm font-medium text-gray-900">{adminData?.username}</p>
+                            <p className="text-xs text-red-500">Administrator</p>
+                          </>
+                        ) : (
+                          <>
+                            <p className="text-sm font-medium text-gray-900">{user?.fullName}</p>
+                            <p className="text-xs text-gray-500">{user?.email}</p>
+                          </>
+                        )}
                       </div>
                     </div>
-                    <Link
-                      to="/user/dashboard"
-                      className="flex items-center space-x-2 w-full p-3 text-gray-700 hover:bg-indigo-50 hover:text-indigo-600 transition-colors duration-200 rounded-lg"
-                      onClick={() => setIsOpen(false)}
-                    >
-                      <User className="w-4 h-4" />
-                      <span>Dashboard</span>
-                    </Link>
-                    <button
-                      onClick={() => {
-                        signout();
-                        setIsOpen(false);
-                      }}
-                      className="flex items-center space-x-2 w-full p-3 text-gray-700 hover:bg-red-50 hover:text-red-600 transition-colors duration-200 rounded-lg"
-                    >
-                      <LogOut className="w-4 h-4" />
-                      <span>Sign Out</span>
-                    </button>
+                    
+                    {isAdminAuthenticated ? (
+                      <>
+                        <Link
+                          to="/admin/dashboard"
+                          className="flex items-center space-x-2 w-full p-3 text-gray-700 hover:bg-red-50 hover:text-red-600 transition-colors duration-200 rounded-lg"
+                          onClick={() => setIsOpen(false)}
+                        >
+                          <Settings className="w-4 h-4" />
+                          <span>Admin Dashboard</span>
+                        </Link>
+                        <button
+                          onClick={() => {
+                            handleAdminSignout();
+                            setIsOpen(false);
+                          }}
+                          className="flex items-center space-x-2 w-full p-3 text-gray-700 hover:bg-red-50 hover:text-red-600 transition-colors duration-200 rounded-lg"
+                        >
+                          <LogOut className="w-4 h-4" />
+                          <span>Sign Out</span>
+                        </button>
+                      </>
+                    ) : (
+                      <>
+                        <Link
+                          to="/user/dashboard"
+                          className="flex items-center space-x-2 w-full p-3 text-gray-700 hover:bg-indigo-50 hover:text-indigo-600 transition-colors duration-200 rounded-lg"
+                          onClick={() => setIsOpen(false)}
+                        >
+                          <User className="w-4 h-4" />
+                          <span>Dashboard</span>
+                        </Link>
+                        <button
+                          onClick={() => {
+                            signout();
+                            setIsOpen(false);
+                          }}
+                          className="flex items-center space-x-2 w-full p-3 text-gray-700 hover:bg-red-50 hover:text-red-600 transition-colors duration-200 rounded-lg"
+                        >
+                          <LogOut className="w-4 h-4" />
+                          <span>Sign Out</span>
+                        </button>
+                      </>
+                    )}
                   </div>
                 ) : (
                   <div className="space-y-3">

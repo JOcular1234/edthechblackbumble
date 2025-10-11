@@ -1,17 +1,17 @@
 
 import React from 'react';
-import { useLocation, useNavigate, Link } from 'react-router-dom';
+import { useLocation, Link } from 'react-router-dom';
 import { CheckCircle, Download, Mail, Calendar, ArrowRight } from 'lucide-react';
 
 const CheckoutSuccess = () => {
   const location = useLocation();
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   
   // Get data from location state (passed from checkout)
-  const { service, orderData, total } = location.state || {};
+  const { service, orderData, total, orderNumber, order } = location.state || {};
   
-  // Generate order number
-  const orderNumber = `ORD-${Date.now().toString().slice(-8)}`;
+  // Use order number from backend or generate fallback
+  const displayOrderNumber = orderNumber || order?.orderNumber || `ORD-${Date.now().toString().slice(-8)}`;
   
   // If no data is available, show error state
   if (!service || !orderData) {
@@ -52,7 +52,7 @@ const CheckoutSuccess = () => {
           </div>
           <h1 className="text-3xl font-bold text-gray-900 mb-2">Payment Successful!</h1>
           <p className="text-gray-600 mb-1">Your order has been confirmed</p>
-          <p className="text-sm text-gray-500">Order #{orderNumber}</p>
+          <p className="text-sm text-gray-500">Order #{displayOrderNumber}</p>
         </div>
 
         {/* Main Order Card */}

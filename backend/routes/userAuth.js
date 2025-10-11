@@ -148,6 +148,21 @@ router.post('/signin', async (req, res) => {
       });
     }
 
+    // Check if account is disabled
+    if (user.status === 'disabled') {
+      return res.status(403).json({
+        success: false,
+        message: 'Your account has been disabled. Please contact support for assistance.',
+        data: {
+          status: 'disabled',
+          reason: user.disabledReason,
+          disabledAt: user.disabledAt,
+          supportEmail: 'support@edthech.com',
+          supportPhone: '+1234567890'
+        }
+      });
+    }
+
     // Verify password
     const isPasswordValid = await user.comparePassword(password);
 

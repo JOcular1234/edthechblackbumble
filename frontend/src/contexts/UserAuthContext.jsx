@@ -4,7 +4,8 @@ import { API_BASE_URL } from '../config/api';
 
 const UserAuthContext = createContext();
 
-export const useUserAuth = () => {
+// Custom hook to use the UserAuthContext
+const useUserAuth = () => {
   const context = useContext(UserAuthContext);
   if (!context) {
     throw new Error('useUserAuth must be used within a UserAuthProvider');
@@ -19,7 +20,7 @@ export const UserAuthProvider = ({ children }) => {
 
   useEffect(() => {
     checkAuthStatus();
-  }, []);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const checkAuthStatus = async () => {
     try {
@@ -116,6 +117,17 @@ export const UserAuthProvider = ({ children }) => {
       }
     } catch (error) {
       console.error('Signin error:', error);
+      
+      // Handle disabled account specifically
+      if (error.response?.status === 403 && error.response?.data?.data?.status === 'disabled') {
+        return {
+          success: false,
+          disabled: true,
+          message: error.response.data.message,
+          disabledData: error.response.data.data
+        };
+      }
+      
       return {
         success: false,
         message: error.response?.data?.message || 'Signin failed'
@@ -245,4 +257,6 @@ export const UserAuthProvider = ({ children }) => {
   );
 };
 
+// eslint-disable-next-line react-refresh/only-export-components
+export { useUserAuth };
 export default UserAuthContext;

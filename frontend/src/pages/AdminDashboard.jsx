@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import ProductManagement from '../components/admin/ProductManagement';
+import OrderManagement from '../components/admin/OrderManagement';
+import UserManagement from '../components/admin/UserManagement';
 
 const AdminDashboard = () => {
-  const [activeTab, setActiveTab] = useState('products');
+  const [activeTab, setActiveTab] = useState('orders');
   const [adminData, setAdminData] = useState(null);
   const navigate = useNavigate();
 
@@ -114,18 +116,8 @@ const AdminDashboard = () => {
           <div className="flex-1 ml-8">
             <div className="bg-white rounded-lg shadow-sm border border-gray-200">
               {activeTab === 'products' && <ProductManagement />}
-              {activeTab === 'orders' && (
-                <div className="p-8 text-center">
-                  <h3 className="text-lg font-medium text-gray-900 mb-2">Orders Management</h3>
-                  <p className="text-gray-600">Coming soon...</p>
-                </div>
-              )}
-              {activeTab === 'users' && (
-                <div className="p-8 text-center">
-                  <h3 className="text-lg font-medium text-gray-900 mb-2">User Management</h3>
-                  <p className="text-gray-600">Coming soon...</p>
-                </div>
-              )}
+              {activeTab === 'orders' && <OrderManagement />}
+              {activeTab === 'users' && <UserManagement />}
               {activeTab === 'analytics' && (
                 <div className="p-8 text-center">
                   <h3 className="text-lg font-medium text-gray-900 mb-2">Analytics</h3>

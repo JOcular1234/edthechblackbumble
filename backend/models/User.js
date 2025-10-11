@@ -44,6 +44,11 @@ const userSchema = new mongoose.Schema({
     type: String,
     default: null
   },
+  status: {
+    type: String,
+    enum: ['active', 'disabled'],
+    default: 'active'
+  },
   isActive: {
     type: Boolean,
     default: true
@@ -73,6 +78,37 @@ const userSchema = new mongoose.Schema({
     default: 0
   },
   lockUntil: {
+    type: Date,
+    default: null
+  },
+  address: {
+    street: String,
+    city: String,
+    state: String,
+    zipCode: String,
+    country: String
+  },
+  statusHistory: [{
+    status: {
+      type: String,
+      enum: ['active', 'disabled'],
+      required: true
+    },
+    reason: String,
+    changedBy: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Admin'
+    },
+    changedAt: {
+      type: Date,
+      default: Date.now
+    }
+  }],
+  disabledReason: {
+    type: String,
+    default: null
+  },
+  disabledAt: {
     type: Date,
     default: null
   },

@@ -3,6 +3,7 @@ import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { FaStar, FaArrowLeft, FaLock, FaCreditCard, FaPaypal, FaApplePay } from 'react-icons/fa';
 import { useUserAuth } from '../contexts/UserAuthContext';
 import { useProducts } from '../contexts/ProductContext';
+import { API_BASE_URL } from '../config/api';
 
 const Checkout = () => {
   const { serviceId } = useParams();
@@ -27,13 +28,13 @@ const Checkout = () => {
     additionalRequirements: ''
   });
   
-  const [paymentMethod, setPaymentMethod] = useState('paypal');
-  const [cardData, setCardData] = useState({
-    cardNumber: '',
-    expiryDate: '',
-    cvv: '',
-    cardholderName: ''
-  });
+  // const [paymentMethod, setPaymentMethod] = useState('paypal');
+  // const [cardData] = useState({
+  //   cardNumber: '',
+  //   expiryDate: '',
+  //   cvv: '',
+  //   cardholderName: ''
+  // });
   
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState({});
@@ -73,32 +74,6 @@ const Checkout = () => {
     }
   };
 
-  const handleCardInputChange = (e) => {
-    const { name, value } = e.target;
-    let formattedValue = value;
-
-    // Format card number
-    if (name === 'cardNumber') {
-      formattedValue = value.replace(/\s/g, '').replace(/(.{4})/g, '$1 ').trim();
-      if (formattedValue.length > 19) formattedValue = formattedValue.slice(0, 19);
-    }
-    
-    // Format expiry date
-    if (name === 'expiryDate') {
-      formattedValue = value.replace(/\D/g, '').replace(/(\d{2})(\d)/, '$1/$2');
-      if (formattedValue.length > 5) formattedValue = formattedValue.slice(0, 5);
-    }
-    
-    // Format CVV
-    if (name === 'cvv') {
-      formattedValue = value.replace(/\D/g, '').slice(0, 4);
-    }
-
-    setCardData(prev => ({
-      ...prev,
-      [name]: formattedValue
-    }));
-  };
 
   const validateForm = () => {
     const newErrors = {};
@@ -133,34 +108,67 @@ const Checkout = () => {
     setLoading(true);
 
     try {
-      // Simulate API call for order processing
-      await new Promise(resolve => setTimeout(resolve, 2000));
+      const pricing = calculateTotal();
       
-      // In a real app, you would:
-      // 1. Process payment with payment gateway
-      // 2. Create order in database
-      // 3. Send confirmation emails
-      // 4. Update user's bookings
+      // Prepare order data
+      const orderData = {
+        serviceId: service._id,
+        customerInfo: {
+          firstName: formData.firstName,
+          lastName: formData.lastName,
+          email: formData.email,
+          phone: formData.phone,
+          company: formData.company
+        },
+        projectDetails: {
+          projectDescription: formData.projectDescription,
+          timeline: formData.timeline,
+          additionalRequirements: formData.additionalRequirements
+        },
+        pricing: {
+          subtotal: pricing.subtotal,
+          tax: pricing.tax,
+          total: pricing.total
+        }
+      };
+
+      // Get user token from localStorage
+      const token = localStorage.getItem('userToken');
       
-      console.log('Order Data:', {
-        service: service,
-        customer: formData,
-        payment: paymentMethod === 'card' ? { ...cardData, cvv: '***' } : { method: paymentMethod },
-        total: calculateTotal()
+      // Create order via API
+      const response = await fetch(`${API_BASE_URL}/api/orders`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify(orderData)
       });
 
-      // Redirect to success page
-      navigate('/checkout/success', {
-        state: {
-          service: service,
-          orderData: formData,
-          total: calculateTotal()
-        }
-      });
+      const result = await response.json();
+
+      if (!response.ok) {
+        throw new Error(result.message || 'Failed to create order');
+      }
+
+      if (result.success) {
+        // Redirect to success page with order details
+        navigate('/checkout/success', {
+          state: {
+            service: service,
+            orderData: formData,
+            total: pricing,
+            orderNumber: result.data.orderNumber,
+            order: result.data.order
+          }
+        });
+      } else {
+        throw new Error(result.message || 'Order creation failed');
+      }
 
     } catch (error) {
       console.error('Checkout error:', error);
-      alert('There was an error processing your order. Please try again.');
+      alert(`There was an error processing your order: ${error.message}. Please try again.`);
     } finally {
       setLoading(false);
     }

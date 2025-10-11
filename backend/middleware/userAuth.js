@@ -42,6 +42,20 @@ const authenticateUserToken = async (req, res, next) => {
       });
     }
 
+    if (user.status === 'disabled') {
+      return res.status(403).json({ 
+        success: false, 
+        message: 'Your account has been disabled. Please contact support for assistance.',
+        data: {
+          status: 'disabled',
+          reason: user.disabledReason,
+          disabledAt: user.disabledAt,
+          supportEmail: 'support@edthech.com',
+          supportPhone: '+1234567890'
+        }
+      });
+    }
+
     if (user.isLocked()) {
       return res.status(401).json({ 
         success: false, 

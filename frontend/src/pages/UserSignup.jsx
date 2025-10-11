@@ -100,7 +100,7 @@ const UserSignup = () => {
     setSuccess('');
 
     try {
-      const { confirmPassword, ...signupData } = formData;
+      const { confirmPassword: _, ...signupData } = formData;
       const result = await signup(signupData);
       
       if (result.success) {
