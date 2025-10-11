@@ -14,15 +14,21 @@ import About from './pages/About';
 import Contact from './pages/Contact';
 import AdminSignin from './pages/AdminSignin';
 import AdminDashboard from './pages/AdminDashboard';
+import UserSignup from './pages/UserSignup';
+import UserSignin from './pages/UserSignin';
+import UserDashboard from './pages/UserDashboard';
 import Footer from './components/footer/Footer';
+import ProtectedRoute from './components/ProtectedRoute';
 
 // Context
 import { ProductProvider } from './contexts/ProductContext';
+import { UserAuthProvider } from './contexts/UserAuthContext';
 
 function App() {
   return (
     <ProductProvider>
-      <Router>
+      <UserAuthProvider>
+        <Router>
         <div className="App">
           <Navbar />
           <Routes>
@@ -33,12 +39,28 @@ function App() {
             <Route path="/contact" element={<Contact />} />
             <Route path="/admin/signin" element={<AdminSignin />} />
             <Route path="/admin/dashboard" element={<AdminDashboard />} />
+            <Route path="/user/signup" element={
+              <ProtectedRoute requireAuth={false}>
+                <UserSignup />
+              </ProtectedRoute>
+            } />
+            <Route path="/user/signin" element={
+              <ProtectedRoute requireAuth={false}>
+                <UserSignin />
+              </ProtectedRoute>
+            } />
+            <Route path="/user/dashboard" element={
+              <ProtectedRoute requireAuth={true}>
+                <UserDashboard />
+              </ProtectedRoute>
+            } />
 
           </Routes>
           <Footer />
 
         </div>
-      </Router>
+        </Router>
+      </UserAuthProvider>
     </ProductProvider>
   );
 }
