@@ -355,10 +355,19 @@ const Home = () => {
                         </div>
                       </div>
                       
-                      <hr className="border-white/30 border mb-2" />
+                      <hr className="border-white/30 border mb-4" />
+                      
+                      {/* Book Now Button */}
+                      <Link
+                        to={`/checkout/${product._id}`}
+                        state={{ service: product }}
+                        className="w-full bg-white text-pink-600 py-3 px-4 rounded-lg font-bold text-center hover:bg-gray-100 transition-colors block"
+                      >
+                        Book Now
+                      </Link>
                       
                       {product.note && (
-                        <p className="text-white/90 text-xs text-center font-medium">{product.note}</p>
+                        <p className="text-white/90 text-xs text-center font-medium mt-2">{product.note}</p>
                       )}
                     </div>
                   </div>

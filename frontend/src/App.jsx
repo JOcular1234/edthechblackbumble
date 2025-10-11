@@ -17,6 +17,8 @@ import AdminDashboard from './pages/AdminDashboard';
 import UserSignup from './pages/UserSignup';
 import UserSignin from './pages/UserSignin';
 import UserDashboard from './pages/UserDashboard';
+import Checkout from './pages/Checkout';
+import CheckoutSuccess from './pages/CheckoutSuccess';
 import Footer from './components/footer/Footer';
 import ProtectedRoute from './components/ProtectedRoute';
 
@@ -52,6 +54,16 @@ function App() {
             <Route path="/user/dashboard" element={
               <ProtectedRoute requireAuth={true}>
                 <UserDashboard />
+              </ProtectedRoute>
+            } />
+            <Route path="/checkout/:serviceId" element={
+              <ProtectedRoute requireAuth={true}>
+                <Checkout />
+              </ProtectedRoute>
+            } />
+            <Route path="/checkout/success" element={
+              <ProtectedRoute requireAuth={true}>
+                <CheckoutSuccess />
               </ProtectedRoute>
             } />
 

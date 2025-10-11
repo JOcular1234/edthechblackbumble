@@ -129,8 +129,7 @@ const UserDashboard = () => {
           <nav className="-mb-px flex space-x-8" aria-label="Tabs">
             {[
               { id: 'overview', name: 'Overview', icon: '📊' },
-              { id: 'courses', name: 'My Courses', icon: '📚' },
-              { id: 'progress', name: 'Progress', icon: '📈' },
+              { id: 'bookings', name: 'My Bookings', icon: '📋' },
               { id: 'profile', name: 'Profile', icon: '👤' },
               { id: 'settings', name: 'Settings', icon: '⚙️' }
             ].map((tab) => (
@@ -161,13 +160,13 @@ const UserDashboard = () => {
                 <div className="flex items-center">
                   <div className="flex-shrink-0">
                     <div className="w-8 h-8 bg-indigo-500 rounded-md flex items-center justify-center">
-                      <span className="text-white text-sm">📚</span>
+                      <span className="text-white text-sm">📋</span>
                     </div>
                   </div>
                   <div className="ml-5 w-0 flex-1">
                     <dl>
                       <dt className="text-sm font-medium text-gray-500 truncate">
-                        Enrolled Courses
+                        Active Bookings
                       </dt>
                       <dd className="text-lg font-medium text-gray-900">0</dd>
                     </dl>
@@ -187,7 +186,7 @@ const UserDashboard = () => {
                   <div className="ml-5 w-0 flex-1">
                     <dl>
                       <dt className="text-sm font-medium text-gray-500 truncate">
-                        Completed Courses
+                        Completed Projects
                       </dt>
                       <dd className="text-lg font-medium text-gray-900">0</dd>
                     </dl>
@@ -201,15 +200,15 @@ const UserDashboard = () => {
                 <div className="flex items-center">
                   <div className="flex-shrink-0">
                     <div className="w-8 h-8 bg-yellow-500 rounded-md flex items-center justify-center">
-                      <span className="text-white text-sm">⏱️</span>
+                      <span className="text-white text-sm">💰</span>
                     </div>
                   </div>
                   <div className="ml-5 w-0 flex-1">
                     <dl>
                       <dt className="text-sm font-medium text-gray-500 truncate">
-                        Hours Learned
+                        Total Spent
                       </dt>
-                      <dd className="text-lg font-medium text-gray-900">0</dd>
+                      <dd className="text-lg font-medium text-gray-900">$0</dd>
                     </dl>
                   </div>
                 </div>
@@ -218,30 +217,19 @@ const UserDashboard = () => {
           </div>
         )}
 
-        {activeTab === 'courses' && (
+        {activeTab === 'bookings' && (
           <div className="bg-white shadow rounded-lg p-6">
-            <h3 className="text-lg font-medium text-gray-900 mb-4">My Courses</h3>
+            <h3 className="text-lg font-medium text-gray-900 mb-4">My Bookings</h3>
             <div className="text-center py-12">
-              <div className="text-gray-400 text-6xl mb-4">📚</div>
-              <h3 className="text-lg font-medium text-gray-900 mb-2">No courses yet</h3>
-              <p className="text-gray-500 mb-4">Start your learning journey by enrolling in a course</p>
+              <div className="text-gray-400 text-6xl mb-4">📋</div>
+              <h3 className="text-lg font-medium text-gray-900 mb-2">No bookings yet</h3>
+              <p className="text-gray-500 mb-4">Book your first service to get started with our professional team</p>
               <button
                 onClick={() => navigate('/services')}
                 className="bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700"
               >
-                Browse Courses
+                Browse Services
               </button>
-            </div>
-          </div>
-        )}
-
-        {activeTab === 'progress' && (
-          <div className="bg-white shadow rounded-lg p-6">
-            <h3 className="text-lg font-medium text-gray-900 mb-4">Learning Progress</h3>
-            <div className="text-center py-12">
-              <div className="text-gray-400 text-6xl mb-4">📈</div>
-              <h3 className="text-lg font-medium text-gray-900 mb-2">No progress to show</h3>
-              <p className="text-gray-500">Your learning progress will appear here once you start taking courses</p>
             </div>
           </div>
         )}
