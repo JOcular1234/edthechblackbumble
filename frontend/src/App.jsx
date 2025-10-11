@@ -9,7 +9,6 @@ import Hero from './components/herosection/Hero';
 // Pages (we'll create these next)
 import Home from './pages/Home';
 import Services from './pages/Services';
-import Pricing from './pages/Pricing';
 import About from './pages/About';
 import Contact from './pages/Contact';
 import AdminSignin from './pages/AdminSignin';
@@ -37,7 +36,6 @@ function App() {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/services" element={<Services />} />
-            <Route path="/pricing" element={<Pricing />} />
             <Route path="/about" element={<About />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/admin/signin" element={<AdminSignin />} />
