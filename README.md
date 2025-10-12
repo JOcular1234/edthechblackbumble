@@ -165,7 +165,6 @@ npm start
 - ✅ **Toggle Active** - Enable/disable products
 - ✅ **Category Organization** - Organize by service type
 - ✅ **Feature Management** - Add/remove product features
-- ✅ **Pricing Control** - Set prices and billing types
 - ✅ **Visual Customization** - Choose gradient styles
 
 ### Security Features
@@ -179,7 +178,6 @@ npm start
 
 - **Home** (`/`) - Landing page with hero section
 - **Services** (`/services`) - Dynamic product showcase
-- **Pricing** (`/pricing`) - Pricing information
 - **About** (`/about`) - Company information
 - **Contact** (`/contact`) - Contact form
 - **Admin Signin** (`/admin/signin`) - Admin authentication
@@ -210,7 +208,6 @@ npm start
   subtitle: String,
   description: String,
   category: String (enum),
-  price: Number,
   currency: String,
   billing: String (enum),
   features: [String],

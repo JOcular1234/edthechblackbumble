@@ -65,9 +65,7 @@ adminSchema.virtual('fullName').get(function() {
   return `${this.firstName} ${this.lastName}`;
 });
 
-// Index for better query performance
-adminSchema.index({ email: 1 });
-adminSchema.index({ username: 1 });
+// Indexes are automatically created for unique fields (email, username)
 
 // Pre-save middleware to hash password
 adminSchema.pre('save', async function(next) {

@@ -48,56 +48,57 @@ export const ProductProvider = ({ children }) => {
       return [];
     }
   };
-  const fetchAllProducts = async (activeOnly = true) => {
+
+  // Optimized: Single API call instead of 12 separate calls
+  const fetchAllProducts = async () => {
+    setLoading(true);
+    setError('');
+    
     try {
-      setLoading(true);
-      setError('');
-
-      const categories = [
-        'graphic_design',
-        'logo_branding',
-        'motion_graphic',
-        'websites',
-        'video_creation',
-        'social_media_plan',
-        'content_writing',
-        'app_development',
-        'pitch_deck',
-        'sponsorship_deck',
-        'grant_application',
-        'virtual_assistant'
-      ];
-
-      const productPromises = categories.map(category => 
-        fetchProductsByCategory(category, activeOnly)
-      );
+      // Single API call to get all products
+      const response = await axios.get(`${API_BASE_URL}/api/products?active=true`);
       
-      const results = await Promise.all(productPromises);
-      
-      const newProducts = {};
-      categories.forEach((category, index) => {
-        newProducts[category] = results[index];
-      });
+      if (response.data.success) {
+        const allProducts = response.data.data.products;
+        
+        // Group products by category
+        const productsByCategory = {
+          graphic_design: [],
+          logo_branding: [],
+          motion_graphic: [],
+          websites: [],
+          video_creation: [],
+          social_media_plan: [],
+          content_writing: [],
+          app_development: [],
+          pitch_deck: [],
+          sponsorship_deck: [],
+          grant_application: [],
+          virtual_assistant: []
+        };
 
-      setProducts(newProducts);
+        allProducts.forEach(product => {
+          if (productsByCategory[product.category]) {
+            productsByCategory[product.category].push(product);
+          }
+        });
+
+        setProducts(productsByCategory);
+      }
     } catch (error) {
-      console.error('Error fetching all products:', error);
-      setError('Failed to fetch products. Please check if the backend server is running.');
+      console.error('Error fetching products:', error);
+      setError('Failed to load products');
     } finally {
       setLoading(false);
     }
   };
 
   const refreshProducts = () => {
-    fetchAllProducts(true);
-  };
-
-  const refreshAllProducts = () => {
-    fetchAllProducts(false);
+    fetchAllProducts();
   };
 
   useEffect(() => {
-    fetchAllProducts(true);
+    fetchAllProducts();
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const value = {
@@ -105,7 +106,6 @@ export const ProductProvider = ({ children }) => {
     loading,
     error,
     refreshProducts,
-    refreshAllProducts,
     fetchProductsByCategory
   };
 
