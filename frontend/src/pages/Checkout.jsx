@@ -90,7 +90,7 @@ const Checkout = () => {
 
   const calculateTotal = () => {
     const basePrice = parseFloat(service?.price || 0);
-    const tax = basePrice * 0.1; // 10% tax
+    const tax = basePrice * 0.05; // 5% tax
     return {
       subtotal: basePrice,
       tax: tax,
@@ -463,7 +463,7 @@ const Checkout = () => {
                   <span className="font-medium">${pricing.subtotal.toFixed(2)}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-gray-600">Tax (10%)</span>
+                  <span className="text-gray-600">Tax (5%)</span>
                   <span className="font-medium">${pricing.tax.toFixed(2)}</span>
                 </div>
                 <div className="border-t border-gray-200 pt-3">

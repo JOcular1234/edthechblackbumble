@@ -301,7 +301,7 @@ const Home = () => {
             </div>
 
             {/* Product Cards Grid */}
-            <div className="grid md:grid-cols-2 lg:grid-cols-2 gap-8">
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
               {category.products.length === 0 ? (
                 <div className="col-span-3 text-center py-16">
                   <h3 className="text-2xl font-bold text-gray-900 mb-3">No {category.title} Products Available</h3>
@@ -314,7 +314,7 @@ const Home = () => {
                     className="bg-white rounded-3xl shadow-2xl overflow-hidden border-4 border-purple-100 flex flex-col h-full"
                   >
                     {/* Product Image */}
-                    <div className="relative h-40 overflow-hidden">
+                    <div className="relative h-48 overflow-hidden">
                       {product.image ? (
                         <img 
                           src={product.image} 
@@ -371,8 +371,8 @@ const Home = () => {
                         
                         <div className="text-right">
                           <div className="flex items-baseline">
-                            <span className="text-white/90 text-xl font-bold">{product.currency}</span>
-                            <span className="text-3xl font-extrabold text-white ml-1">{product.price}</span>
+                            <span className="text-white/90 text-xl font-bold">From</span>
+                            <span className="text-2xl font-extrabold text-white ml-1">{product.currency}{product.price}</span>
                           </div>
                           <p className="text-white/90 text-sm font-medium">{product.billing}</p>
                         </div>
@@ -400,6 +400,7 @@ const Home = () => {
           </div>
         </section>
       ))}
+
 
       {/* Why Choose Edtech Section */}
       <section className="py-16 lg:py-20 bg-gradient-to-br from-blue-50 to-indigo-100">
@@ -532,6 +533,8 @@ const Home = () => {
         </div>
       </section>
 
+
+
       {/* Testimonials Section */}
       <section className="py-16 lg:py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -549,12 +552,7 @@ const Home = () => {
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             {/* Testimonial 1 */}
             <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-2xl p-8 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2">
-              {/* Quote Icon */}
-              <div className="w-12 h-12 bg-blue-600 rounded-full flex items-center justify-center mb-6">
-                <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M14,17H17L19,13V7H13V13H16M6,17H9L11,13V7H5V13H8L6,17Z"/>
-                </svg>
-              </div>
+             
               
               {/* Testimonial Text */}
               <p className="text-gray-700 mb-6 leading-relaxed">
@@ -584,12 +582,7 @@ const Home = () => {
 
             {/* Testimonial 2 */}
             <div className="bg-gradient-to-br from-purple-50 to-pink-50 rounded-2xl p-8 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2">
-              {/* Quote Icon */}
-              <div className="w-12 h-12 bg-purple-600 rounded-full flex items-center justify-center mb-6">
-                <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M14,17H17L19,13V7H13V13H16M6,17H9L11,13V7H5V13H8L6,17Z"/>
-                </svg>
-              </div>
+             
               
               {/* Testimonial Text */}
               <p className="text-gray-700 mb-6 leading-relaxed">
@@ -619,12 +612,7 @@ const Home = () => {
 
             {/* Testimonial 3 */}
             <div className="bg-gradient-to-br from-green-50 to-teal-50 rounded-2xl p-8 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2">
-              {/* Quote Icon */}
-              <div className="w-12 h-12 bg-green-600 rounded-full flex items-center justify-center mb-6">
-                <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M14,17H17L19,13V7H13V13H16M6,17H9L11,13V7H5V13H8L6,17Z"/>
-                </svg>
-              </div>
+              
               
               {/* Testimonial Text */}
               <p className="text-gray-700 mb-6 leading-relaxed">
@@ -633,7 +621,7 @@ const Home = () => {
               
               {/* Rating */}
               <div className="flex items-center mb-4">
-                {[...Array(5)].map((_, i) => (
+                {[...Array(4)].map((_, i) => (
                   <svg key={i} className="w-5 h-5 text-yellow-400 fill-current" viewBox="0 0 24 24">
                     <path d="M12,17.27L18.18,21L16.54,13.97L22,9.24L14.81,8.62L12,2L9.19,8.62L2,9.24L7.46,13.97L5.82,21L12,17.27Z"/>
                   </svg>
@@ -652,110 +640,7 @@ const Home = () => {
               </div>
             </div>
 
-            {/* Testimonial 4 */}
-            <div className="bg-gradient-to-br from-orange-50 to-red-50 rounded-2xl p-8 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2">
-              {/* Quote Icon */}
-              <div className="w-12 h-12 bg-orange-600 rounded-full flex items-center justify-center mb-6">
-                <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M14,17H17L19,13V7H13V13H16M6,17H9L11,13V7H5V13H8L6,17Z"/>
-                </svg>
-              </div>
-              
-              {/* Testimonial Text */}
-              <p className="text-gray-700 mb-6 leading-relaxed">
-                "The mobile app development service was exceptional. They delivered a user-friendly, feature-rich app that our customers love. The project was completed on time and within budget."
-              </p>
-              
-              {/* Rating */}
-              <div className="flex items-center mb-4">
-                {[...Array(5)].map((_, i) => (
-                  <svg key={i} className="w-5 h-5 text-yellow-400 fill-current" viewBox="0 0 24 24">
-                    <path d="M12,17.27L18.18,21L16.54,13.97L22,9.24L14.81,8.62L12,2L9.19,8.62L2,9.24L7.46,13.97L5.82,21L12,17.27Z"/>
-                  </svg>
-                ))}
-              </div>
-              
-              {/* Client Info */}
-              <div className="flex items-center">
-                <div className="w-12 h-12 bg-gradient-to-r from-orange-600 to-red-600 rounded-full flex items-center justify-center text-white font-bold mr-4">
-                  DT
-                </div>
-                <div>
-                  <div className="font-semibold text-gray-900">David Thompson</div>
-                  <div className="text-gray-600 text-sm">CTO, MobileFirst Ltd.</div>
-                </div>
-              </div>
-            </div>
 
-            {/* Testimonial 5 */}
-            <div className="bg-gradient-to-br from-indigo-50 to-blue-50 rounded-2xl p-8 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2">
-              {/* Quote Icon */}
-              <div className="w-12 h-12 bg-indigo-600 rounded-full flex items-center justify-center mb-6">
-                <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M14,17H17L19,13V7H13V13H16M6,17H9L11,13V7H5V13H8L6,17Z"/>
-                </svg>
-              </div>
-              
-              {/* Testimonial Text */}
-              <p className="text-gray-700 mb-6 leading-relaxed">
-                "Edtech's SEO services boosted our website traffic by 300% in just 6 months. Their strategic approach and attention to detail made all the difference. Incredible results!"
-              </p>
-              
-              {/* Rating */}
-              <div className="flex items-center mb-4">
-                {[...Array(5)].map((_, i) => (
-                  <svg key={i} className="w-5 h-5 text-yellow-400 fill-current" viewBox="0 0 24 24">
-                    <path d="M12,17.27L18.18,21L16.54,13.97L22,9.24L14.81,8.62L12,2L9.19,8.62L2,9.24L7.46,13.97L5.82,21L12,17.27Z"/>
-                  </svg>
-                ))}
-              </div>
-              
-              {/* Client Info */}
-              <div className="flex items-center">
-                <div className="w-12 h-12 bg-gradient-to-r from-indigo-600 to-blue-600 rounded-full flex items-center justify-center text-white font-bold mr-4">
-                  LC
-                </div>
-                <div>
-                  <div className="font-semibold text-gray-900">Lisa Chen</div>
-                  <div className="text-gray-600 text-sm">Owner, E-commerce Plus</div>
-                </div>
-              </div>
-            </div>
-
-            {/* Testimonial 6 */}
-            <div className="bg-gradient-to-br from-pink-50 to-rose-50 rounded-2xl p-8 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2">
-              {/* Quote Icon */}
-              <div className="w-12 h-12 bg-pink-600 rounded-full flex items-center justify-center mb-6">
-                <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M14,17H17L19,13V7H13V13H16M6,17H9L11,13V7H5V13H8L6,17Z"/>
-                </svg>
-              </div>
-              
-              {/* Testimonial Text */}
-              <p className="text-gray-700 mb-6 leading-relaxed">
-                "The website design service was phenomenal. They created a beautiful, responsive site that perfectly represents our brand. Our online conversions have increased dramatically!"
-              </p>
-              
-              {/* Rating */}
-              <div className="flex items-center mb-4">
-                {[...Array(5)].map((_, i) => (
-                  <svg key={i} className="w-5 h-5 text-yellow-400 fill-current" viewBox="0 0 24 24">
-                    <path d="M12,17.27L18.18,21L16.54,13.97L22,9.24L14.81,8.62L12,2L9.19,8.62L2,9.24L7.46,13.97L5.82,21L12,17.27Z"/>
-                  </svg>
-                ))}
-              </div>
-              
-              {/* Client Info */}
-              <div className="flex items-center">
-                <div className="w-12 h-12 bg-gradient-to-r from-pink-600 to-rose-600 rounded-full flex items-center justify-center text-white font-bold mr-4">
-                  RW
-                </div>
-                <div>
-                  <div className="font-semibold text-gray-900">Robert Wilson</div>
-                  <div className="text-gray-600 text-sm">President, Creative Agency</div>
-                </div>
-              </div>
-            </div>
           </div>
 
           {/* CTA Section */}

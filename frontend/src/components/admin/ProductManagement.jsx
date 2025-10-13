@@ -4,7 +4,7 @@ import { useProducts } from '../../contexts/ProductContext';
 import { API_BASE_URL } from '../../config/api';
 
 const ProductManagement = () => {
-  const { refreshAllProducts } = useProducts();
+  const { refreshProducts } = useProducts();
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -208,7 +208,7 @@ const ProductManagement = () => {
 
       if (response.data.success) {
         await fetchProducts();
-        refreshAllProducts(); // Refresh global product state
+        refreshProducts(); // Refresh global product state
         resetForm();
       }
     } catch (error) {
@@ -258,7 +258,7 @@ const ProductManagement = () => {
 
       if (response.data.success) {
         await fetchProducts();
-        refreshAllProducts(); // Refresh global product state
+        refreshProducts(); // Refresh global product state
       }
     } catch (error) {
       console.error('Error deleting product:', error);
@@ -281,7 +281,7 @@ const ProductManagement = () => {
 
       if (response.data.success) {
         await fetchProducts();
-        refreshAllProducts(); // Refresh global product state
+        refreshProducts(); // Refresh global product state
       }
     } catch (error) {
       console.error('Error toggling popular:', error);
@@ -304,7 +304,7 @@ const ProductManagement = () => {
 
       if (response.data.success) {
         await fetchProducts();
-        refreshAllProducts(); // Refresh global product state
+        refreshProducts(); // Refresh global product state
       }
     } catch (error) {
       console.error('Error toggling active:', error);

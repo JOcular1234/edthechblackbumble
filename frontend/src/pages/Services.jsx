@@ -382,8 +382,8 @@ const Services = () => {
                               
                               <div className="text-right">
                                 <div className="flex items-baseline">
-                                  <span className="text-white/90 text-xl font-bold">{product.currency}</span>
-                                  <span className="text-3xl font-extrabold text-white ml-1">{product.price}</span>
+                                  <span className="text-white/90 text-xl font-bold">From</span>
+                                  <span className="text-2xl font-extrabold text-white ml-1"> {product.currency}{product.price}</span>
                                 </div>
                                 <p className="text-white/90 text-sm font-medium">{product.billing}</p>
                               </div>

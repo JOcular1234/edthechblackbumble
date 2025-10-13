@@ -57,7 +57,7 @@ router.post('/', authenticateUserToken, async (req, res) => {
     // Recalculate pricing with timeline adjustment
     const basePrice = parseFloat(product.price);
     const adjustedSubtotal = basePrice + (basePrice * timelineAdjustment);
-    const tax = adjustedSubtotal * 0.1; // 10% tax
+    const tax = adjustedSubtotal * 0.05; // 5% tax
     const total = adjustedSubtotal + tax;
 
     // Create order object

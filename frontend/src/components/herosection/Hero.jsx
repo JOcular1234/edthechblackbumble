@@ -39,7 +39,7 @@ const Hero = () => {
             </div>
 
             {/* Main Headline */}
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white leading-tight drop-shadow-lg">
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white leading-tight drop-shadow-lg ">
               Connect with Expert
               <br />
               <span className="text-orange-400">Service Providers</span>
@@ -57,10 +57,7 @@ const Hero = () => {
               </button>
               </Link>
               
-              <button className="group bg-white/10 backdrop-blur-sm hover:bg-white/20 text-white border border-white/30 px-8 py-4 rounded-lg font-semibold text-lg shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300 flex items-center justify-center gap-3">
-                <Play className="w-5 h-5" />
-                How It Works
-              </button>
+             
             </div>
 
             {/* Social Proof */}

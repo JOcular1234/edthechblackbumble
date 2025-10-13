@@ -21,6 +21,7 @@ import Checkout from './pages/Checkout';
 import CheckoutSuccess from './pages/CheckoutSuccess';
 import Footer from './components/footer/Footer';
 import ProtectedRoute from './components/ProtectedRoute';
+import ScrollToTop from './components/ScrollToTop';
 
 // Context
 import { ProductProvider } from './contexts/ProductContext';
@@ -31,6 +32,7 @@ function App() {
     <ProductProvider>
       <UserAuthProvider>
         <Router>
+          <ScrollToTop />
         <div className="App">
           <Navbar />
           <Routes>
