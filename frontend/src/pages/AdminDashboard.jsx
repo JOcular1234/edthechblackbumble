@@ -1,7 +1,8 @@
 
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Package, FileText, Users, Mail, BarChart3, Settings, LogOut, Bell, User } from 'lucide-react';
+import { Package, FileText, Users, Mail, BarChart3, Settings, LogOut, Bell, User, RefreshCw } from 'lucide-react';
+import { API_BASE_URL } from '../config/api';
 import ProductManagement from '../components/admin/ProductManagement';
 import OrderManagement from '../components/admin/OrderManagement';
 import UserManagement from '../components/admin/UserManagement';
@@ -11,12 +12,51 @@ const AdminDashboard = () => {
   const [activeTab, setActiveTab] = useState('orders');
   const [adminData, setAdminData] = useState(null);
   const [stats, setStats] = useState({
-    products: 245,
-    orders: 1289,
-    users: 456,
-    revenue: 45678
+    products: { total: 0, change: 0, changeType: 'increase' },
+    orders: { total: 0, change: 0, changeType: 'increase' },
+    users: { total: 0, change: 0, changeType: 'increase' },
+    revenue: { total: 0, change: 0, changeType: 'increase' }
   });
+  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
+
+  const fetchStats = async () => {
+    try {
+      const token = localStorage.getItem('adminToken');
+      console.log('Fetching stats with token:', token ? 'Present' : 'Missing');
+      
+      const response = await fetch(`${API_BASE_URL}/api/admin/stats`, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        }
+      });
+
+      console.log('Response status:', response.status);
+      console.log('Response ok:', response.ok);
+
+      if (!response.ok) {
+        const errorData = await response.text();
+        console.error('Error response:', errorData);
+        throw new Error(`Failed to fetch stats: ${response.status} - ${errorData}`);
+      }
+
+      const data = await response.json();
+      console.log('Received data:', data);
+      
+      if (data.success) {
+        setStats(data.data.overview);
+        console.log('Stats updated successfully');
+      } else {
+        console.error('API returned success: false', data);
+      }
+    } catch (error) {
+      console.error('Error fetching stats:', error);
+      // Keep default values if fetch fails
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
     // Check if admin is logged in
@@ -30,20 +70,15 @@ const AdminDashboard = () => {
 
     try {
       setAdminData(JSON.parse(storedAdminData));
+      fetchStats(); // Fetch real stats from backend
     } catch (error) {
       console.error('Error parsing admin data:', error);
       navigate('/admin/signin');
     }
   }, [navigate]);
 
-  const handleSignout = () => {
-    localStorage.removeItem('adminToken');
-    localStorage.removeItem('adminRefreshToken');
-    localStorage.removeItem('adminData');
-    navigate('/admin/signin');
-  };
 
-  if (!adminData) {
+  if (!adminData || loading) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
@@ -73,7 +108,7 @@ const AdminDashboard = () => {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
-      <header className="bg-white shadow-sm border-b border-gray-200 sticky top-0 z-40">
+      <header className="bg-white shadow-sm border-b border-gray-200 sticky top-0 z-40 mt-24">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center">
@@ -81,6 +116,13 @@ const AdminDashboard = () => {
             </div>
             
             <div className="flex items-center space-x-4">
+              <button 
+                onClick={fetchStats}
+                className="p-2 text-gray-400 hover:text-gray-500 rounded-lg hover:bg-gray-100 transition-colors"
+                title="Refresh Stats"
+              >
+                <RefreshCw className="w-5 h-5" />
+              </button>
               <button className="p-2 text-gray-400 hover:text-gray-500 rounded-lg hover:bg-gray-100 transition-colors">
                 <Bell className="w-5 h-5" />
               </button>
@@ -95,13 +137,7 @@ const AdminDashboard = () => {
                 }`}>
                   {adminData.role === 'super_admin' ? 'Super Admin' : 'Admin'}
                 </span>
-                <button
-                  onClick={handleSignout}
-                  className="flex items-center space-x-2 bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-md text-sm font-medium transition-colors"
-                >
-                  <LogOut className="w-4 h-4" />
-                  <span>Sign Out</span>
-                </button>
+               
               </div>
             </div>
           </div>
@@ -112,17 +148,41 @@ const AdminDashboard = () => {
         {/* Stats Overview */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
           {[
-            { label: 'Total Products', value: stats.products, change: '+12%', icon: statIcons[0] },
-            { label: 'Total Orders', value: stats.orders, change: '+8%', icon: statIcons[1] },
-            { label: 'Total Users', value: stats.users, change: '+5%', icon: statIcons[2] },
-            { label: 'Total Revenue', value: `$${stats.revenue.toLocaleString()}`, change: '+15%', icon: statIcons[3] }
+            { 
+              label: 'Total Products', 
+              value: stats.products.total, 
+              change: `${stats.products.change >= 0 ? '+' : ''}${stats.products.change}%`, 
+              changeType: stats.products.changeType,
+              icon: statIcons[0] 
+            },
+            { 
+              label: 'Total Orders', 
+              value: stats.orders.total, 
+              change: `${stats.orders.change >= 0 ? '+' : ''}${stats.orders.change}%`, 
+              changeType: stats.orders.changeType,
+              icon: statIcons[1] 
+            },
+            { 
+              label: 'Total Users', 
+              value: stats.users.total, 
+              change: `${stats.users.change >= 0 ? '+' : ''}${stats.users.change}%`, 
+              changeType: stats.users.changeType,
+              icon: statIcons[2] 
+            },
+            { 
+              label: 'Total Revenue', 
+              value: `$${stats.revenue.total.toLocaleString()}`, 
+              change: `${stats.revenue.change >= 0 ? '+' : ''}${stats.revenue.change}%`, 
+              changeType: stats.revenue.changeType,
+              icon: statIcons[3] 
+            }
           ].map((stat, index) => (
             <div key={index} className="bg-white p-6 rounded-xl shadow-sm border border-gray-200 hover:shadow-md transition-shadow">
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm font-medium text-gray-600">{stat.label}</p>
                   <p className="text-2xl font-bold text-gray-900 mt-1">{stat.value}</p>
-                  <p className={`text-sm ${stat.change.startsWith('+') ? 'text-green-600' : 'text-red-600'} mt-1`}>
+                  <p className={`text-sm ${stat.changeType === 'increase' ? 'text-green-600' : 'text-red-600'} mt-1`}>
                     {stat.change} from last month
                   </p>
                 </div>

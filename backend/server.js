@@ -28,6 +28,7 @@ app.use('/api/products', require('./routes/products'));
 app.use('/api/orders', require('./routes/orders'));
 app.use('/api/notifications', require('./routes/notifications'));
 app.use('/api/admin/users', require('./routes/adminUsers'));
+app.use('/api/admin', require('./routes/adminStats'));
 app.use('/api/contact', require('./routes/contact'));
 
 // Basic route

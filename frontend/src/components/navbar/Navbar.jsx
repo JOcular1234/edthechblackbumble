@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Menu, X, ChevronDown, Phone, Mail, User, LogOut, Settings } from 'lucide-react';
 import { FaBell } from 'react-icons/fa';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useUserAuth } from '../../contexts/UserAuthContext';
 import NotificationBell from '../notifications/NotificationBell';
 
@@ -14,6 +14,10 @@ const Navbar = () => {
   const [isAdminAuthenticated, setIsAdminAuthenticated] = useState(false);
   const { user, isAuthenticated, signout, loading } = useUserAuth();
   const navigate = useNavigate();
+  const location = useLocation();
+  
+  // Check if we're on admin signin page
+  const isAdminSigninPage = location.pathname === '/admin/signin';
 
   // Handle scroll effect
   useEffect(() => {
@@ -30,9 +34,12 @@ const Navbar = () => {
       const adminToken = localStorage.getItem('adminToken');
       const adminDataStr = localStorage.getItem('adminData');
       
+      console.log('Checking admin auth:', { adminToken: !!adminToken, adminDataStr: !!adminDataStr });
+      
       if (adminToken && adminDataStr) {
         try {
           const parsedAdminData = JSON.parse(adminDataStr);
+          console.log('Admin data parsed:', parsedAdminData);
           setAdminData(parsedAdminData);
           setIsAdminAuthenticated(true);
         } catch (error) {
@@ -50,7 +57,23 @@ const Navbar = () => {
     
     // Listen for storage changes (when admin signs in/out in another tab)
     window.addEventListener('storage', checkAdminAuth);
-    return () => window.removeEventListener('storage', checkAdminAuth);
+    
+    // Also listen for custom admin auth events
+    const handleAdminAuthChange = () => {
+      console.log('Admin auth change event received');
+      checkAdminAuth();
+    };
+    
+    window.addEventListener('adminAuthChange', handleAdminAuthChange);
+    
+    // Check periodically in case of missed events (every 5 seconds)
+    const interval = setInterval(checkAdminAuth, 5000);
+    
+    return () => {
+      window.removeEventListener('storage', checkAdminAuth);
+      window.removeEventListener('adminAuthChange', handleAdminAuthChange);
+      clearInterval(interval);
+    };
   }, []);
 
   const navItems = [
@@ -71,8 +94,55 @@ const Navbar = () => {
     setIsAdminAuthenticated(false);
     setAdminData(null);
     setUserDropdown(false);
-    navigate('/');
+    
+    // Trigger custom event to notify other components of auth change
+    window.dispatchEvent(new CustomEvent('adminAuthChange'));
+    
+    navigate('/admin/signin');
   };
+
+  // Render simplified navbar for admin signin page
+  if (isAdminSigninPage) {
+    return (
+      <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+        isScrolled 
+          ? 'bg-white/95 backdrop-blur-md shadow-lg border-b border-gray-200/20' 
+          : 'bg-black'
+      }`}>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex justify-between items-center h-16 lg:h-20">
+            {/* Logo */}
+            <div className="flex-shrink-0">
+              <Link to="/" className="flex items-center space-x-2">
+                <div className="w-10 h-10 bg-gradient-to-r from-indigo-600 to-purple-600 rounded-lg flex items-center justify-center">
+                  <span className="text-white font-bold text-xl">DS</span>
+                </div>
+                <span className={`font-bold text-xl transition-colors duration-300 ${
+                  isScrolled ? 'text-gray-900' : 'text-white'
+                }`}>
+                  edthech
+                </span>
+              </Link>
+            </div>
+
+            {/* Simple Sign In Button */}
+            <div className="flex items-center">
+              <Link
+                to="/user/signin"
+                className={`px-4 py-2 rounded-lg font-medium transition-all duration-300 ${
+                  isScrolled 
+                    ? 'text-gray-700 hover:text-indigo-600 hover:bg-gray-100' 
+                    : 'text-white hover:bg-white/10'
+                }`}
+              >
+                Sign In
+              </Link>
+            </div>
+          </div>
+        </div>
+      </nav>
+    );
+  }
 
   return (
     <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
@@ -96,8 +166,9 @@ const Navbar = () => {
             </Link>
           </div>
 
-          {/* Desktop Navigation */}
-          <div className="hidden lg:flex items-center space-x-8">
+          {/* Desktop Navigation - Hide when admin is authenticated */}
+          {!isAdminAuthenticated && (
+            <div className="hidden lg:flex items-center space-x-8">
             {navItems.map((item, index) => (
               <div key={item.name} className="relative group">
                 {item.dropdown ? (
@@ -146,7 +217,8 @@ const Navbar = () => {
                 )}
               </div>
             ))}
-          </div>
+            </div>
+          )}
 
           {/* Contact Info & CTA */}
           <div className="hidden lg:flex items-center space-x-4">
@@ -294,7 +366,8 @@ const Navbar = () => {
           isOpen ? 'max-h-screen opacity-100' : 'max-h-0 opacity-0'
         }`}>
           <div className="py-4 space-y-2 bg-white/95 backdrop-blur-md rounded-xl mt-2 border border-gray-200/20">
-            {navItems.map((item, index) => (
+            {/* Hide navigation items when admin is authenticated */}
+            {!isAdminAuthenticated && navItems.map((item, index) => (
               <div key={item.name}>
                 {item.dropdown ? (
                   <div>

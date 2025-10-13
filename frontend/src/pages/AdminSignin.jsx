@@ -41,6 +41,9 @@ const AdminSignin = () => {
         
         console.log('Admin signed in:', response.data.data.admin);
         
+        // Trigger custom event to notify navbar of auth change
+        window.dispatchEvent(new CustomEvent('adminAuthChange'));
+        
         // Redirect to admin dashboard
         setTimeout(() => {
           navigate('/admin/dashboard');
