@@ -131,7 +131,7 @@ adminSchema.statics.createDefaultAdmin = async function() {
     if (!adminExists) {
       const defaultAdmin = new this({
         username: 'admin',
-        email: 'admin@edtech-blackbumble.com',
+        email: 'admin@blackbumble.com',
         password: 'admin123456',
         firstName: 'Super',
         lastName: 'Admin',

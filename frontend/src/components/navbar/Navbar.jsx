@@ -115,12 +115,12 @@ const Navbar = () => {
             <div className="flex-shrink-0">
               <Link to="/" className="flex items-center space-x-2">
                 <div className="w-10 h-10 bg-gradient-to-r from-indigo-600 to-purple-600 rounded-lg flex items-center justify-center">
-                  <span className="text-white font-bold text-xl">DS</span>
+                  <span className="text-white font-bold text-xl">BB</span>
                 </div>
                 <span className={`font-bold text-xl transition-colors duration-300 ${
                   isScrolled ? 'text-gray-900' : 'text-white'
                 }`}>
-                  edthech
+                  BlackBumble 
                 </span>
               </Link>
             </div>
@@ -156,12 +156,12 @@ const Navbar = () => {
           <div className="flex-shrink-0">
             <Link to="/" className="flex items-center space-x-2">
               <div className="w-10 h-10 bg-gradient-to-r from-indigo-600 to-purple-600 rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold text-xl">DS</span>
+                <span className="text-white font-bold text-xl">BB</span>
               </div>
               <span className={`font-bold text-xl transition-colors duration-300 ${
                 isScrolled ? 'text-gray-900' : 'text-white'
               }`}>
-                edthech
+                BlackBumble
               </span>
             </Link>
           </div>
@@ -329,17 +329,17 @@ const Navbar = () => {
                 <div className="flex items-center space-x-3">
                   <Link
                     to="/user/signin"
-                    className={`px-4 py-2 rounded-lg font-medium transition-all duration-300 ${
+                    className={`px-4 py-2 rounded-lg font-medium transition-all duration-300 border ${
                       isScrolled 
-                        ? 'text-gray-700 hover:text-indigo-600 hover:bg-gray-100' 
-                        : 'text-white hover:bg-white/10'
+                        ? 'text-gray-700 hover:text-indigo-600 hover:bg-gray-100 border-black' 
+                        : 'text-white border-white hover:bg-white/10'
                     }`}
                   >
                     Sign In
                   </Link>
                   <Link
                     to="/user/signup"
-                    className="bg-gradient-to-r from-yellow-400 to-orange-500 text-gray-900 px-6 py-2 rounded-lg font-semibold hover:shadow-lg transform hover:-translate-y-0.5 transition-all duration-300"
+                    className="bg-gradient-to-r from-pink-500 to-pink-500 text-white hover:text-white px-6 py-2 rounded-lg font-semibold transform hover:-translate-y-0.5 transition-all duration-300"
                   >
                     Get Started
                   </Link>

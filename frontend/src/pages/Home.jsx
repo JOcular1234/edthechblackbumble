@@ -295,7 +295,7 @@ const Home = () => {
       ))}
 
 
-      {/* Why Choose Edtech Section */}
+      {/* Why Choose BlackBumble Section */}
       <section className="py-16 lg:py-20 bg-gradient-to-br from-blue-50 to-indigo-100">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
@@ -306,127 +306,80 @@ const Home = () => {
                 <h2 className="text-4xl md:text-5xl font-bold text-blue-900 mb-6">
                   Why You Should Consider
                   <br />
-                  <span className="text-blue-600">Edtech</span>
+                  <span className="text-pink-500">BlackBumble Business Packages</span>
                 </h2>
                 <p className="text-lg text-gray-700 leading-relaxed">
-                  Edtech believes in Tech-quity (Tech Equity) for all. This is why we are committed to 
-                  intentionally partnering with your company to create a culture of diversity and inclusivity of your 
-                  team. Our goal is to create a space for you to leverage our diverse talents in tech & other while you 
-                  create impact & equity.
+                  BlackBumble Business Packages delivers comprehensive digital solutions that transform your business vision into reality. 
+                  From stunning graphic design and professional websites to compelling pitch decks and innovative app development, 
+                  we provide end-to-end services that elevate your brand and accelerate your growth. Our expert team combines 
+                  creativity with technical excellence to deliver results that exceed expectations.
                 </p>
               </div>
 
-              {/* Features List */}
-              <div className="space-y-6">
-                {/* Comprehensive Solutions */}
-                <div className="flex items-start space-x-4">
-                  <div className="w-12 h-12 bg-purple-100 rounded-xl flex items-center justify-center flex-shrink-0">
-                    <svg className="w-6 h-6 text-purple-600" fill="currentColor" viewBox="0 0 24 24">
-                      <path d="M12 2L13.09 8.26L20 9L13.09 9.74L12 16L10.91 9.74L4 9L10.91 8.26L12 2Z"/>
-                    </svg>
-                  </div>
-                  <div>
-                    <h3 className="text-xl font-bold text-blue-900 mb-2">Comprehensive Solutions</h3>
-                    <p className="text-gray-600">
-                      We offer a wide range of services under one roof, meeting all your 
-                      business and career needs.
-                    </p>
-                  </div>
-                </div>
-
-                {/* Expertise & Innovation */}
-                <div className="flex items-start space-x-4">
-                  <div className="w-12 h-12 bg-pink-100 rounded-xl flex items-center justify-center flex-shrink-0">
-                    <svg className="w-6 h-6 text-pink-600" fill="currentColor" viewBox="0 0 24 24">
-                      <path d="M12,2A3,3 0 0,1 15,5V11A3,3 0 0,1 12,14A3,3 0 0,1 9,11V5A3,3 0 0,1 12,2M19,11C19,14.53 16.39,17.44 13,17.93V21H11V17.93C7.61,17.44 5,14.53 5,11H7A5,5 0 0,0 12,16A5,5 0 0,0 17,11H19Z"/>
-                    </svg>
-                  </div>
-                  <div>
-                    <h3 className="text-xl font-bold text-blue-900 mb-2">Expertise & Innovation</h3>
-                    <p className="text-gray-600">
-                      Our team of seasoned professionals leverages cutting-edge solutions to 
-                      drive your success.
-                    </p>
-                  </div>
-                </div>
-
-                {/* Personalized Approach */}
-                <div className="flex items-start space-x-4">
-                  <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center flex-shrink-0">
-                    <svg className="w-6 h-6 text-blue-600" fill="currentColor" viewBox="0 0 24 24">
-                      <path d="M12,4A4,4 0 0,1 16,8A4,4 0 0,1 12,12A4,4 0 0,1 8,8A4,4 0 0,1 12,4M12,14C16.42,14 20,15.79 20,18V20H4V18C4,15.79 7.58,14 12,14Z"/>
-                    </svg>
-                  </div>
-                  <div>
-                    <h3 className="text-xl font-bold text-blue-900 mb-2">Personalized Approach</h3>
-                    <p className="text-gray-600">
-                      We tailor our services to your unique needs and provide dedicated 
-                      support for optimal outcomes.
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
+                          </div>
 
             {/* Right Stats Grid */}
-            <div className="grid grid-cols-2 gap-6">
-              {/* Happy Clients */}
-              <div className="bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-shadow duration-300 relative overflow-hidden">
-                <div className="absolute top-0 right-0 w-16 h-16 bg-gradient-to-br from-orange-400 to-orange-500 rounded-bl-3xl flex items-center justify-center">
-                  <svg className="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M12 2L13.09 8.26L20 9L13.09 9.74L12 16L10.91 9.74L4 9L10.91 8.26L12 2Z"/>
-                  </svg>
-                </div>
-                <div className="pt-4">
-                  <div className="text-3xl font-bold text-gray-900 mb-2">50+</div>
-                  <div className="text-gray-600 text-sm">Happy Clients</div>
-                </div>
-              </div>
-
-              {/* Customer Satisfaction */}
-              <div className="bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-shadow duration-300 relative overflow-hidden">
-                <div className="absolute top-0 right-0 w-16 h-16 bg-gradient-to-br from-orange-400 to-orange-500 rounded-bl-3xl flex items-center justify-center">
-                  <svg className="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M12,17.27L18.18,21L16.54,13.97L22,9.24L14.81,8.62L12,2L9.19,8.62L2,9.24L7.46,13.97L5.82,21L12,17.27Z"/>
-                  </svg>
-                </div>
-                <div className="pt-4">
-                  <div className="text-3xl font-bold text-gray-900 mb-2">99.9%</div>
-                  <div className="text-gray-600 text-sm">Customer Satisfaction</div>
-                </div>
-              </div>
-
-              {/* Business Transformed */}
-              <div className="bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-shadow duration-300 relative overflow-hidden">
-                <div className="absolute top-0 right-0 w-16 h-16 bg-gradient-to-br from-orange-400 to-orange-500 rounded-bl-3xl flex items-center justify-center">
-                  <svg className="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M13,9H11V7H13M13,17H11V11H13M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2Z"/>
-                  </svg>
-                </div>
-                <div className="pt-4">
-                  <div className="text-3xl font-bold text-gray-900 mb-2">65+</div>
-                  <div className="text-gray-600 text-sm">Business Transformed</div>
-                </div>
-              </div>
-
-              {/* Team Dedication */}
-              <div className="bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-shadow duration-300 relative overflow-hidden">
-                <div className="absolute top-0 right-0 w-16 h-16 bg-gradient-to-br from-orange-400 to-orange-500 rounded-bl-3xl flex items-center justify-center">
-                  <svg className="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M16,4C18.11,4 19.99,5.89 19.99,8C19.99,10.11 18.11,12 16,12C13.89,12 12,10.11 12,8C12,5.89 13.89,4 16,4M24,17V19H16V17C16,14.79 19.58,13 24,13C28.42,13 32,14.79 32,17M8,4C10.11,4 12,5.89 12,8C12,10.11 10.11,12 8,12C5.89,12 4,10.11 4,8C4,5.89 5.89,4 8,4M8,13C12.42,13 16,14.79 16,17V19H0V17C0,14.79 3.58,13 8,13Z"/>
-                  </svg>
-                </div>
-                <div className="pt-4">
-                  <div className="text-3xl font-bold text-gray-900 mb-2">100%</div>
-                  <div className="text-gray-600 text-sm">Team Dedication</div>
-                </div>
-              </div>
+            <div className="w-full h-full">
+             <img src="/writer.jpg" alt="writer" className="w-full h-full object-cover rounded-lg"/>
             </div>
           </div>
         </div>
       </section>
 
+      {/* Need a Website Developer Section */}
+      <section className="py-16 lg:py-20">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="bg-gradient-to-br from-pink-500 to-pink-600 rounded-3xl px-8 py-12 lg:px-16 lg:py-16">
+          <div className="grid lg:grid-cols-2 gap-12 items-center">
+            {/* Left Content */}
+            <div className="text-white space-y-6">
+              <h2 className="text-4xl md:text-5xl font-bold leading-tight">
+                Need a website developer?
+              </h2>
+              <p className="text-xl text-pink-100 leading-relaxed">
+                Get matched with the right expert to keep building and marketing your project
+              </p>
+              <Link 
+                to="/services?category=websites"
+                className="inline-block bg-white text-pink-600 px-8 py-4 rounded-lg font-semibold text-lg hover:bg-pink-50 transform hover:-translate-y-1 transition-all duration-300 shadow-lg"
+              >
+                Find an expert
+              </Link>
+            </div>
 
+            {/* Right Video */}
+            <div className="relative">
+              <div className="bg-pink-400/30 rounded-2xl backdrop-blur-sm">
+                <div className="aspect-video bg-black/20 rounded-xl overflow-hidden shadow-2xl">
+                  <video 
+                    className="w-full h-full object-cover"
+                    autoPlay 
+                    muted 
+                    loop
+                    playsInline
+                  >
+                    <source src="/websitedevelopment.mp4" type="video/mp4" />
+                    {/* Fallback for browsers that don't support video */}
+                    <div className="w-full h-full bg-gradient-to-br from-pink-300 to-pink-400 flex items-center justify-center ">
+                      <div className="text-center text-white">
+                        <svg className="w-16 h-16 mx-auto mb-4" fill="currentColor" viewBox="0 0 24 24">
+                          <path d="M8,5.14V19.14L19,12.14L8,5.14Z" />
+                        </svg>
+                        <p className="text-lg font-medium">Demo Video</p>
+                      </div>
+                    </div>
+                  </video>
+                </div>
+                
+                {/* Decorative Elements */}
+                <div className="absolute -top-4 -right-4 w-24 h-24 bg-white/10 rounded-full"></div>
+                <div className="absolute -bottom-6 -left-6 w-32 h-32 bg-white/5 rounded-full"></div>
+              </div>
+            </div>
+          </div>
+          </div>
+        </div>
+      </section>
 
       {/* Testimonials Section */}
       <section className="py-16 lg:py-20 bg-white">
@@ -449,7 +402,7 @@ const Home = () => {
               
               {/* Testimonial Text */}
               <p className="text-gray-700 mb-6 leading-relaxed">
-                "Edtech transformed our entire digital presence. Their graphic design team created stunning visuals that perfectly captured our brand identity. The results exceeded our expectations!"
+                "BlackBumble transformed our entire digital presence. Their graphic design team created stunning visuals that perfectly captured our brand identity. The results exceeded our expectations!"
               </p>
               
               {/* Rating */}
@@ -536,14 +489,90 @@ const Home = () => {
 
           </div>
 
+
+          {/* Industrial Motion Design Showcase */}
+          <section className="mt-16 mb-16">
+            <div className="text-center mb-8">
+              <h3 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+                Industrial Motion Design
+              </h3>
+              <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+                Experience our cutting-edge motion graphics and industrial design capabilities
+              </p>
+            </div>
+            
+            <div className="relative rounded-2xl overflow-hidden shadow-2xl bg-gradient-to-br from-gray-900 to-black">
+              {/* Video Container */}
+              <div className="relative" style={{ aspectRatio: '21/9' }}>
+                <video 
+                  src="/industrialmotiondesign.mp4" 
+                  autoPlay 
+                  loop 
+                  muted 
+                  playsInline
+                  className="w-full h-full object-cover"
+                />
+                
+                {/* Overlay Gradient */}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent pointer-events-none"></div>
+                
+                {/* Play Button Overlay (for visual appeal) */}
+                <div className="absolute inset-0 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity duration-300 bg-black/10">
+                  <div className="w-20 h-20 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center">
+                    <svg className="w-8 h-8 text-white ml-1" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M8,5.14V19.14L19,12.14L8,5.14Z" />
+                    </svg>
+                  </div>
+                </div>
+              </div>
+              
+              {/* Bottom Info Bar */}
+              <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-6">
+                <div className="flex items-center justify-between text-white">
+                  <div>
+                    <h4 className="font-semibold text-lg">Industrial Motion Graphics</h4>
+                    <p className="text-white/80 text-sm">Professional 3D Animation & Design</p>
+                  </div>
+                  <div className="flex items-center space-x-4">
+                    <div className="flex items-center space-x-1">
+                      <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M12,4A8,8 0 0,1 20,12A8,8 0 0,1 12,20A8,8 0 0,1 4,12A8,8 0 0,1 12,4M12,6A6,6 0 0,0 6,12A6,6 0 0,0 12,18A6,6 0 0,0 18,12A6,6 0 0,0 12,6Z"/>
+                      </svg>
+                      <span className="text-xs">HD Quality</span>
+                    </div>
+                    <div className="flex items-center space-x-1">
+                      <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M15.5,8L10,12L15.5,16V8Z"/>
+                      </svg>
+                      <span className="text-xs">Auto Play</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            {/* Call to Action */}
+            <div className="text-center mt-8">
+              <Link
+                to="/services?category=video_creation"
+                className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-purple-600 to-pink-600 text-white font-semibold rounded-lg hover:from-purple-700 hover:to-pink-700 transform hover:-translate-y-1 transition-all duration-300 shadow-lg"
+              >
+                <svg className="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M17,10.5V7A1,1 0 0,0 16,6H4A1,1 0 0,0 3,7V17A1,1 0 0,0 4,18H16A1,1 0 0,0 17,17V13.5L21,17.5V6.5L17,10.5Z"/>
+                </svg>
+                Explore Video Services
+              </Link>
+            </div>
+          </section>
+
           {/* CTA Section */}
           <div className="text-center mt-16">
             <p className="text-lg text-gray-600 mb-6">
               Ready to join our satisfied clients?
             </p>
-            <button className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-8 py-4 rounded-full font-semibold text-lg shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300">
+            <Link to="/user/signup"><button className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-8 py-4 rounded-full font-semibold text-lg shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300">
               Start Your Project Today
-            </button>
+            </button></Link>
           </div>
         </div>
       </section>

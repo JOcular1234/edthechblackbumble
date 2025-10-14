@@ -33,7 +33,7 @@ app.use('/api/contact', require('./routes/contact'));
 
 // Basic route
 app.get('/', (req, res) => {
-  res.json({ message: 'Edtech BlackBumble API Server' });
+  res.json({ message: ' BlackBumble API Server' });
 });
 
 // Error handling middleware

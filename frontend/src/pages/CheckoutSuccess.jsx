@@ -181,7 +181,7 @@ const CheckoutSuccess = () => {
         <div className="mt-8 text-center">
           <p className="text-sm text-gray-600 mb-2">Need help with your order?</p>
           <a
-            href="mailto:support@edtech-blackbumble.com"
+            href="mailto:support@blackbumble.com"
             className="text-sm text-indigo-600 hover:text-indigo-700 font-medium"
           >
             Contact Support
