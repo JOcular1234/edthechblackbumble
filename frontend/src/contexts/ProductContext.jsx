@@ -49,6 +49,60 @@ export const ProductProvider = ({ children }) => {
     }
   };
 
+  // Search products function
+  const searchProducts = async (searchQuery, category = null, page = 1, limit = 20) => {
+    try {
+      setLoading(true);
+      let url = `${API_BASE_URL}/api/products/search?q=${encodeURIComponent(searchQuery)}&page=${page}&limit=${limit}`;
+      
+      if (category) {
+        url += `&category=${category}`;
+      }
+      
+      const response = await axios.get(url);
+      
+      if (response.data.success) {
+        return response.data.data;
+      }
+      return { products: [], pagination: null, searchTerm: searchQuery };
+    } catch (error) {
+      console.error('Error searching products:', error);
+      setError('Failed to search products');
+      return { products: [], pagination: null, searchTerm: searchQuery };
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Get all products with optional search
+  const getAllProducts = async (searchQuery = null, category = null) => {
+    try {
+      setLoading(true);
+      let url = `${API_BASE_URL}/api/products?active=true`;
+      
+      if (searchQuery) {
+        url += `&search=${encodeURIComponent(searchQuery)}`;
+      }
+      
+      if (category) {
+        url += `&category=${category}`;
+      }
+      
+      const response = await axios.get(url);
+      
+      if (response.data.success) {
+        return response.data.data.products;
+      }
+      return [];
+    } catch (error) {
+      console.error('Error fetching products:', error);
+      setError('Failed to fetch products');
+      return [];
+    } finally {
+      setLoading(false);
+    }
+  };
+
   // Optimized: Single API call instead of 12 separate calls
   const fetchAllProducts = async () => {
     setLoading(true);
@@ -106,7 +160,9 @@ export const ProductProvider = ({ children }) => {
     loading,
     error,
     refreshProducts,
-    fetchProductsByCategory
+    fetchProductsByCategory,
+    searchProducts,
+    getAllProducts
   };
 
   return (

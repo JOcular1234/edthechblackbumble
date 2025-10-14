@@ -39,7 +39,7 @@ const router = express.Router();
 // @access  Public
 router.get('/', async (req, res) => {
   try {
-    const { category, popular, active = 'true' } = req.query;
+    const { category, popular, active = 'true', search } = req.query;
     
     let query = {};
     
@@ -58,6 +58,19 @@ router.get('/', async (req, res) => {
       query.popular = true;
     }
     
+    // Add search functionality
+    if (search && search.trim()) {
+      const searchRegex = new RegExp(search.trim(), 'i'); // Case-insensitive search
+      query.$or = [
+        { name: searchRegex },
+        { subtitle: searchRegex },
+        { description: searchRegex },
+        { category: searchRegex },
+        { features: { $in: [searchRegex] } },
+        { tags: { $in: [searchRegex] } }
+      ];
+    }
+    
     const products = await Product.find(query)
       .populate('createdBy', 'username firstName lastName')
       .populate('updatedBy', 'username firstName lastName')
@@ -65,8 +78,8 @@ router.get('/', async (req, res) => {
 
     res.status(200).json({
       success: true,
-      message: 'Products retrieved successfully',
-      data: { products, count: products.length }
+      message: search ? `Found ${products.length} products for "${search}"` : 'Products retrieved successfully',
+      data: { products, count: products.length, searchTerm: search || null }
     });
 
   } catch (error) {
@@ -74,6 +87,89 @@ router.get('/', async (req, res) => {
     res.status(500).json({
       success: false,
       message: 'Server error retrieving products'
+    });
+  }
+});
+
+// @route   GET /api/products/search
+// @desc    Advanced search products
+// @access  Public
+router.get('/search', async (req, res) => {
+  try {
+    const { q, category, limit = 20, page = 1 } = req.query;
+    
+    if (!q || !q.trim()) {
+      return res.status(400).json({
+        success: false,
+        message: 'Search query is required'
+      });
+    }
+    
+    let query = { isActive: true };
+    
+    // Add category filter if provided
+    if (category) {
+      query.category = category;
+    }
+    
+    // Create search regex
+    const searchRegex = new RegExp(q.trim(), 'i');
+    
+    // Advanced search across multiple fields with scoring
+    const searchQuery = {
+      ...query,
+      $or: [
+        { name: searchRegex },
+        { subtitle: searchRegex },
+        { description: searchRegex },
+        { category: searchRegex },
+        { features: { $in: [searchRegex] } },
+        { tags: { $in: [searchRegex] } }
+      ]
+    };
+    
+    // Calculate pagination
+    const skip = (parseInt(page) - 1) * parseInt(limit);
+    
+    // Execute search with pagination
+    const [products, totalCount] = await Promise.all([
+      Product.find(searchQuery)
+        .populate('createdBy', 'username firstName lastName')
+        .populate('updatedBy', 'username firstName lastName')
+        .sort({ sortOrder: 1, createdAt: -1 })
+        .skip(skip)
+        .limit(parseInt(limit)),
+      Product.countDocuments(searchQuery)
+    ]);
+    
+    // Calculate pagination info
+    const totalPages = Math.ceil(totalCount / parseInt(limit));
+    const hasNextPage = parseInt(page) < totalPages;
+    const hasPrevPage = parseInt(page) > 1;
+    
+    res.status(200).json({
+      success: true,
+      message: `Found ${totalCount} products for "${q}"`,
+      data: {
+        products,
+        pagination: {
+          currentPage: parseInt(page),
+          totalPages,
+          totalCount,
+          limit: parseInt(limit),
+          hasNextPage,
+          hasPrevPage
+        },
+        searchTerm: q,
+        category: category || null
+      }
+    });
+    
+  } catch (error) {
+    console.error('Search products error:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Server error during search'
     });
   }
 });

@@ -1,24 +1,48 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { ArrowRight, Play, CheckCircle, Star } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 const Hero = () => {
+  const [searchQuery, setSearchQuery] = useState('');
+  const navigate = useNavigate();
+
+  // Handle search functionality
+  const handleSearch = (e) => {
+    e.preventDefault();
+    if (searchQuery.trim()) {
+      // Navigate to services page with search query
+      navigate(`/services?search=${encodeURIComponent(searchQuery.trim())}`);
+    } else {
+      // If empty search, just go to services page
+      navigate('/services');
+    }
+  };
+
+  // Handle input change
+  const handleInputChange = (e) => {
+    setSearchQuery(e.target.value);
+  };
+
+  // Handle Enter key press
+  const handleKeyPress = (e) => {
+    if (e.key === 'Enter') {
+      handleSearch(e);
+    }
+  };
+
   return (
 
     <>
     <section className="relative min-h-screen bg-white overflow-hidden flex items-center py-16 lg:py-20">
-      {/* Background Video */}
-      <div className="absolute inset-0 w-full h-full overflow-hidden ">
-        <video 
+      {/* Background Image */}
+      <div className="absolute inset-0 w-full h-full overflow-hidden mt-16">
+        <img 
+          src="/hero-delivery-CQt0cyfX.jpg" 
+          alt="Professional service delivery background" 
           className="absolute top-0 left-0 w-full h-full object-cover"
-          src="/Purple and Blue Modern Cyber Security Video (1).mp4"
-          autoPlay
-          muted
-          loop
-          playsInline
         />
-        {/* Video Overlay */}
-        <div className="absolute inset-0 bg-black bg-opacity-40"></div>
+        {/* Image Overlay */}
+        <div className="absolute inset-0 bg-black bg-opacity-50"></div>
       </div>
       
       {/* Background decorative elements */}
@@ -29,39 +53,86 @@ const Hero = () => {
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full">
-        <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
-          {/* Left Content */}
-          <div className="space-y-8">
-            {/* Badge */}
-            <div className="inline-flex items-center gap-2 bg-orange-500/20 backdrop-blur-sm border border-orange-400/30 text-orange-300 px-4 py-2 rounded-full text-sm font-medium">
-              <CheckCircle className="w-4 h-4" />
-              Trusted by 10,000+ Businesses
-            </div>
-
+        <div className="flex items-center min-h-[80vh]">
+          {/* Main Content */}
+          <div className="text-left max-w-4xl space-y-8">
+        
             {/* Main Headline */}
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white leading-tight drop-shadow-lg ">
-              Connect with Expert
-              <br />
-              <span className="text-orange-400">Service Providers</span>
-              <br />
-              Instantly
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white leading-tight drop-shadow-lg mb-8">
+             Connect with Expert 
+Service <br /> Providers
+Instantly
             </h1>
 
-            {/* CTA Buttons */}
-            <div className="flex flex-col sm:flex-row gap-4 pt-4">
-              <Link to="/services">
-              <button className="group bg-orange-500 hover:bg-orange-600 text-white px-8 py-4 rounded-lg font-semibold text-lg shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300 flex items-center justify-center gap-3">
-                <Star className="w-5 h-5" />
-                Browse Services
-                <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-300" />
-              </button>
+            {/* Search Bar */}
+            <div className="relative max-w-2xl">
+              <form onSubmit={handleSearch} className="relative">
+                <input
+                  type="text"
+                  value={searchQuery}
+                  onChange={handleInputChange}
+                  onKeyPress={handleKeyPress}
+                  placeholder="Search for any service..."
+                  className="w-full px-6 py-4 pr-16 text-lg rounded-lg border-0 shadow-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                />
+                <button 
+                  type="submit"
+                  className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-gray-800 text-white p-3 rounded-md hover:bg-gray-700 transition-colors"
+                >
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                  </svg>
+                </button>
+              </form>
+            </div>
+
+            {/* Service Tags */}
+            <div className="flex flex-wrap gap-3 mt-6">
+              <Link to="/services?category=graphic_design">
+                <button className="bg-gray-800 hover:bg-gray-700 text-white px-4 py-2 rounded-full text-sm font-medium transition-colors flex items-center gap-2">
+                  Graphic Design
+                  <ArrowRight className="w-4 h-4" />
+                </button>
               </Link>
               
-             
+              <Link to="/services?category=logo_branding">
+                <button className="bg-teal-600 hover:bg-teal-700 text-white px-4 py-2 rounded-full text-sm font-medium transition-colors flex items-center gap-2">
+                  Logo|Branding
+                  <ArrowRight className="w-4 h-4" />
+                </button>
+              </Link>
+              
+              <Link to="/services?category=motion_graphic">
+                <button className="bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded-full text-sm font-medium transition-colors flex items-center gap-2">
+                  Motion Graphic
+                  <ArrowRight className="w-4 h-4" />
+                </button>
+              </Link>
+              
+              <Link to="/services?category=websites">
+                <button className="bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded-full text-sm font-medium transition-colors flex items-center gap-2">
+                  Websites
+                  <ArrowRight className="w-4 h-4" />
+                </button>
+              </Link>
+              
+              <Link to="/services?category=sponsorship_deck">
+                <button className="bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded-full text-sm font-medium transition-colors flex items-center gap-2">
+                  Sponsorship Deck
+                  <ArrowRight className="w-4 h-4" />
+                </button>
+              </Link>
+              
+              <Link to="/services?category=app_development">
+                <button className="bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded-full text-sm font-medium transition-colors flex items-center gap-2">
+                  App Development|Software
+                  <ArrowRight className="w-4 h-4" />
+                </button>
+              </Link>
             </div>
 
             {/* Social Proof */}
-            <div className="flex items-center gap-6 pt-4">
+            <div className="flex items-center gap-6 pt-8">
               <div className="text-white">
                 <div className="text-2xl font-bold">10K+</div>
                 <div className="text-sm text-gray-300">Happy Clients</div>
@@ -78,37 +149,6 @@ const Hero = () => {
               </div>
             </div>
           </div>
-
-          {/* Right Content */}
-          <div className="space-y-8">
-            {/* Subtitle */}
-            <p className="text-lg md:text-xl text-gray-200 leading-relaxed drop-shadow-md">
-              Connect with top-tier professionals and premium services tailored to your needs. From{' '}
-              <span className="font-semibold text-white">expert consultations</span> to{' '}
-              <span className="font-semibold text-white">custom solutions</span>, we provide everything you need to achieve your goals.
-            </p>
-
-            {/* Key Features */}
-            <div className="grid grid-cols-1 gap-4 text-white">
-              <div className="flex items-center gap-3">
-                <div className="w-2 h-2 bg-orange-400 rounded-full"></div>
-                <span className="text-gray-200">Verified Service Providers</span>
-              </div>
-              <div className="flex items-center gap-3">
-                <div className="w-2 h-2 bg-orange-400 rounded-full"></div>
-                <span className="text-gray-200">24/7 Customer Support</span>
-              </div>
-              <div className="flex items-center gap-3">
-                <div className="w-2 h-2 bg-orange-400 rounded-full"></div>
-                <span className="text-gray-200">Secure Payment Processing</span>
-              </div>
-              <div className="flex items-center gap-3">
-                <div className="w-2 h-2 bg-orange-400 rounded-full"></div>
-                <span className="text-gray-200">Quality Guarantee</span>
-              </div>
-            </div>
-          </div>
-          
         </div>
       </div>
     </section>
