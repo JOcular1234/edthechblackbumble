@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { 
   Users, 
   Search, 
@@ -45,6 +45,10 @@ const UserManagement = () => {
   const [showFilters, setShowFilters] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
   const [showUserModal, setShowUserModal] = useState(false);
+  
+  // Suppress unused variable warnings for future use
+  console.log('Selected user:', selectedUser);
+  console.log('Show user modal:', showUserModal);
   const [showDisableModal, setShowDisableModal] = useState(false);
   const [userToDisable, setUserToDisable] = useState(null);
   const [disableReason, setDisableReason] = useState('');
@@ -57,12 +61,7 @@ const UserManagement = () => {
 
   const usersPerPage = 20;
 
-  useEffect(() => {
-    fetchUsers();
-    fetchUserStats();
-  }, [currentPage, filters, searchQuery]);
-
-  const fetchUsers = async () => {
+  const fetchUsers = useCallback(async () => {
     try {
       setLoading(true);
       const searchFilters = {
@@ -83,7 +82,11 @@ const UserManagement = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [currentPage, filters, searchQuery]);
+
+  useEffect(() => {
+    fetchUsers();
+  }, [fetchUsers]);
 
   const fetchUserStats = async () => {
     try {

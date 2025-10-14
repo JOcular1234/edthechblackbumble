@@ -153,7 +153,7 @@ export const ProductProvider = ({ children }) => {
 
   useEffect(() => {
     fetchAllProducts();
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  }, []);
 
   const value = {
     products,

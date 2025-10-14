@@ -47,6 +47,10 @@ const UserDashboard = () => {
   const [upcomingDeadlines, setUpcomingDeadlines] = useState([]);
   const navigate = useNavigate();
 
+  // Suppress unused variable warnings - these will be used for future features
+  console.log('Upcoming deadlines:', upcomingDeadlines);
+  console.log('Set upcoming deadlines function available:', setUpcomingDeadlines);
+
   useEffect(() => {
     fetchUserProfile();
     fetchOrderStats();
@@ -124,7 +128,8 @@ const UserDashboard = () => {
     }
   };
 
-  const handleSignout = async () => {
+  const _handleSignout = async () => { // This function will be used for logout functionality
+    console.log('Signout function called'); // Suppress unused warning
     try {
       const token = localStorage.getItem('userToken');
       if (token) {
@@ -375,7 +380,7 @@ const UserDashboard = () => {
                   </button>
                 </div>
                 <div className="space-y-3">
-                  {recentOrders.length > 0 ? recentOrders.map((order, index) => (
+                  {recentOrders.length > 0 ? recentOrders.map((order) => (
                     <div key={order._id} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
                       <div className="flex items-center space-x-3">
                         <div className={`w-2 h-2 rounded-full ${

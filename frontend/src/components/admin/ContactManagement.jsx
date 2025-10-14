@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { API_BASE_URL } from '../../config/api';
 import { 
   Mail, 
@@ -33,12 +33,7 @@ const ContactManagement = () => {
   const [replyMessage, setReplyMessage] = useState('');
   const [sendingReply, setSendingReply] = useState(false);
 
-  useEffect(() => {
-    fetchContacts();
-    fetchStats();
-  }, [filters]);
-
-  const fetchContacts = async () => {
+  const fetchContacts = useCallback(async () => {
     try {
       setLoading(true);
       const token = localStorage.getItem('adminToken');
@@ -69,7 +64,12 @@ const ContactManagement = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [filters]);
+
+  useEffect(() => {
+    fetchContacts();
+    fetchStats();
+  }, [fetchContacts]);
 
   const fetchStats = async () => {
     try {
