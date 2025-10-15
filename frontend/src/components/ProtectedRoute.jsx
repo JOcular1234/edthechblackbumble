@@ -15,8 +15,16 @@ const ProtectedRoute = ({ children, requireAuth = true }) => {
   }
 
   if (requireAuth && !isAuthenticated) {
-    // Redirect to signin page with return url
-    return <Navigate to="/user/signin" state={{ from: location }} replace />;
+    // Redirect to signin page with return url, message, and timestamp
+    const message = location.pathname.includes('/checkout') 
+      ? 'Please sign in to proceed with checkout'
+      : 'Please sign in to access this page';
+    
+    return <Navigate to="/user/signin" state={{ 
+      from: location, 
+      message,
+      timestamp: Date.now() // Add timestamp to prevent stale redirects
+    }} replace />;
   }
 
   if (!requireAuth && isAuthenticated) {

@@ -42,7 +42,7 @@ const Hero = () => {
           className="absolute top-0 left-0 w-full h-full object-cover"
         />
         {/* Image Overlay */}
-        <div className="absolute inset-0 bg-black bg-opacity-50"></div>
+        <div className="absolute inset-0 bg-gray-900 bg-opacity-50"></div>
       </div>
       
       {/* Background decorative elements */}
@@ -89,42 +89,42 @@ Instantly
             {/* Service Tags */}
             <div className="flex flex-wrap gap-3 mt-6">
               <Link to="/services?category=graphic_design">
-                <button className="bg-gray-800 hover:bg-gray-700 text-white px-4 py-2 rounded-full text-sm font-medium transition-colors flex items-center gap-2">
+                <button className="bg-pink-600 hover:bg-pink-700 text-white px-4 py-2 rounded-full text-sm font-medium transition-colors flex items-center gap-2">
                   Graphic Design
-                  <ArrowRight className="w-4 h-4" />
+                    <ArrowRight className="w-4 h-4" />
                 </button>
               </Link>
               
               <Link to="/services?category=logo_branding">
-                <button className="bg-teal-600 hover:bg-teal-700 text-white px-4 py-2 rounded-full text-sm font-medium transition-colors flex items-center gap-2">
+                <button className="bg-pink-600 hover:bg-pink-700 text-white px-4 py-2 rounded-full text-sm font-medium transition-colors flex items-center gap-2">
                   Logo|Branding
                   <ArrowRight className="w-4 h-4" />
                 </button>
               </Link>
               
               <Link to="/services?category=motion_graphic">
-                <button className="bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded-full text-sm font-medium transition-colors flex items-center gap-2">
+                <button className="bg-pink-600 hover:bg-pink-700 text-white px-4 py-2 rounded-full text-sm font-medium transition-colors flex items-center gap-2">
                   Motion Graphic
                   <ArrowRight className="w-4 h-4" />
                 </button>
               </Link>
               
               <Link to="/services?category=websites">
-                <button className="bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded-full text-sm font-medium transition-colors flex items-center gap-2">
+                <button className="bg-pink-600 hover:bg-pink-700 text-white px-4 py-2 rounded-full text-sm font-medium transition-colors flex items-center gap-2">
                   Websites
                   <ArrowRight className="w-4 h-4" />
                 </button>
-              </Link>
+              </Link> 
               
               <Link to="/services?category=sponsorship_deck">
-                <button className="bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded-full text-sm font-medium transition-colors flex items-center gap-2">
+                <button className="bg-pink-600 hover:bg-pink-700 text-white px-4 py-2 rounded-full text-sm font-medium transition-colors flex items-center gap-2">
                   Sponsorship Deck
                   <ArrowRight className="w-4 h-4" />
                 </button>
               </Link>
               
               <Link to="/services?category=app_development">
-                <button className="bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded-full text-sm font-medium transition-colors flex items-center gap-2">
+                <button className="bg-pink-600 hover:bg-pink-700 text-white px-4 py-2 rounded-full text-sm font-medium transition-colors flex items-center gap-2">
                   App Development|Software
                   <ArrowRight className="w-4 h-4" />
                 </button>

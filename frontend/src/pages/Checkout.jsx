@@ -4,6 +4,7 @@ import { FaStar, FaArrowLeft, FaLock, FaCreditCard, FaPaypal, FaApplePay } from 
 import { useUserAuth } from '../contexts/UserAuthContext';
 import { useProducts } from '../contexts/ProductContext';
 import { API_BASE_URL } from '../config/api';
+import PayPalButton from '../components/payments/PayPalButton';
 
 const Checkout = () => {
   const { serviceId } = useParams();
@@ -38,25 +39,16 @@ const Checkout = () => {
   
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState({});
+  const [orderData, setOrderData] = useState(null);
+  const [paymentStep, setPaymentStep] = useState('form'); // 'form' or 'payment'
 
   useEffect(() => {
-    // Redirect to signin if not authenticated
-    if (!isAuthenticated) {
-      navigate('/user/signin', { 
-        state: { 
-          from: location,
-          message: 'Please sign in to proceed with checkout'
-        }
-      });
-      return;
-    }
-
-    // Redirect if no service found
+    // Redirect if no service found (authentication is handled by ProtectedRoute)
     if (!service) {
       navigate('/services');
       return;
     }
-  }, [isAuthenticated, service, navigate, location]);
+  }, [service, navigate]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -128,8 +120,8 @@ const Checkout = () => {
     try {
       const pricing = calculateTotal();
       
-      // Prepare order data
-      const orderData = {
+      // Prepare order data (don't create in database yet)
+      const preparedOrderData = {
         serviceId: service._id,
         customerInfo: {
           firstName: formData.firstName,
@@ -150,17 +142,40 @@ const Checkout = () => {
         }
       };
 
-      // Get user token from localStorage
+      // Store order data and move to payment step (don't create order yet)
+      setOrderData(preparedOrderData);
+      setPaymentStep('payment');
+
+    } catch (error) {
+      console.error('Checkout error:', error);
+      alert(`There was an error processing your order: ${error.message}. Please try again.`);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handlePaymentSuccess = async (paymentDetails) => {
+    console.log('Payment successful:', paymentDetails);
+    
+    try {
+      // Now create the order in database after successful payment
       const token = localStorage.getItem('userToken');
       
-      // Create order via API
       const response = await fetch(`${API_BASE_URL}/api/orders`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`
         },
-        body: JSON.stringify(orderData)
+        body: JSON.stringify({
+          ...orderData,
+          payment: {
+            method: 'paypal',
+            transactionId: paymentDetails.captureId,
+            status: 'completed',
+            paidAt: new Date()
+          }
+        })
       });
 
       const result = await response.json();
@@ -169,27 +184,36 @@ const Checkout = () => {
         throw new Error(result.message || 'Failed to create order');
       }
 
-      if (result.success) {
-        // Redirect to success page with order details
-        navigate('/checkout/success', {
-          state: {
-            service: service,
-            orderData: formData,
-            total: pricing,
-            orderNumber: result.data.orderNumber,
-            order: result.data.order
-          }
-        });
-      } else {
-        throw new Error(result.message || 'Order creation failed');
-      }
-
+      // Redirect to success page with order details
+      navigate('/checkout/success', {
+        state: {
+          service: service,
+          orderData: formData,
+          total: orderData.pricing,
+          orderNumber: result.data.orderNumber,
+          order: result.data.order,
+          paymentDetails: paymentDetails
+        }
+      });
     } catch (error) {
-      console.error('Checkout error:', error);
-      alert(`There was an error processing your order: ${error.message}. Please try again.`);
-    } finally {
-      setLoading(false);
+      console.error('Error creating order after payment:', error);
+      alert(`Payment was successful but there was an error creating your order. Please contact support with payment ID: ${paymentDetails.captureId}`);
     }
+  };
+
+  const handlePaymentError = (error) => {
+    console.error('Payment error:', error);
+    alert(`Payment failed: ${error.message || 'Please try again.'}`);
+  };
+
+  const handlePaymentCancel = () => {
+    console.log('Payment cancelled by user');
+    // User can try payment again or go back to form
+  };
+
+  const goBackToForm = () => {
+    setPaymentStep('form');
+    setOrderData(null);
   };
 
   // Show loading state while products are being fetched
@@ -380,48 +404,103 @@ const Checkout = () => {
                 </div>
               </div>
 
-              {/* Payment Method */}
-              <div className="bg-white rounded-lg shadow-md p-6">
-                <h2 className="text-xl font-semibold text-gray-900 mb-6">Payment Method</h2>
-                
-                {/* PayPal Only */}
-                <div className="border-2 border-blue-500 bg-blue-50 rounded-lg p-6 mb-6">
-                  <div className="flex items-center justify-center space-x-3 mb-4">
-                    <FaPaypal className="text-blue-600 text-2xl" />
-                    <span className="text-xl font-semibold text-blue-600">PayPal</span>
+              {/* Payment Method - Show only in form step */}
+              {paymentStep === 'form' && (
+                <>
+                  <div className="bg-white rounded-lg shadow-md p-6">
+                    <h2 className="text-xl font-semibold text-gray-900 mb-6">Payment Method</h2>
+                    
+                    {/* PayPal Only */}
+                    <div className="border-2 border-blue-500 bg-blue-50 rounded-lg p-6 mb-6">
+                      <div className="flex items-center justify-center space-x-3 mb-4">
+                        <FaPaypal className="text-blue-600 text-2xl" />
+                        <span className="text-xl font-semibold text-blue-600">PayPal</span>
+                      </div>
+                      <p className="text-center text-gray-600 mb-4">
+                        Secure payment with PayPal. Complete your order details first, then proceed to payment.
+                      </p>
+                      <div className="flex items-center justify-center space-x-2 text-sm text-gray-500">
+                        <FaLock className="text-green-500" />
+                        <span>256-bit SSL encrypted</span>
+                      </div>
+                    </div>
                   </div>
-                  <p className="text-center text-gray-600 mb-4">
-                    Secure payment with PayPal. You will be redirected to PayPal to complete your payment.
-                  </p>
-                  <div className="flex items-center justify-center space-x-2 text-sm text-gray-500">
-                    <FaLock className="text-green-500" />
-                    <span>256-bit SSL encrypted</span>
+
+                  {/* Submit Button */}
+                  <button
+                    type="submit"
+                    disabled={loading}
+                    className={`w-full py-4 px-6 rounded-lg font-semibold text-white transition-colors flex items-center justify-center ${
+                      loading 
+                        ? 'bg-gray-400 cursor-not-allowed' 
+                        : 'bg-indigo-600 hover:bg-indigo-700'
+                    }`}
+                  >
+                    {loading ? (
+                      <>
+                        <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2"></div>
+                        Creating Order...
+                      </>
+                    ) : (
+                      <>
+                        Create Order & Proceed to Payment
+                      </>
+                    )}
+                  </button>
+                </>
+              )}
+
+              {/* PayPal Payment Section - Show only in payment step */}
+              {paymentStep === 'payment' && orderData && (
+                <div className="bg-white rounded-lg shadow-md p-6">
+                  <div className="flex items-center justify-between mb-6">
+                    <h2 className="text-xl font-semibold text-gray-900">Complete Payment</h2>
+                    <button
+                      onClick={goBackToForm}
+                      className="text-indigo-600 hover:text-indigo-700 text-sm font-medium"
+                    >
+                      ← Edit Order Details
+                    </button>
+                  </div>
+                  
+                  <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
+                    <div className="flex items-center">
+                      <svg className="w-5 h-5 text-blue-500 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                        <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd"/>
+                      </svg>
+                      <span className="text-blue-700 font-medium">Ready for Payment</span>
+                    </div>
+                    <p className="text-blue-600 text-sm mt-1">
+                      Your order will be created after successful payment
+                    </p>
+                  </div>
+
+                  <div className="border-2 border-blue-500 bg-blue-50 rounded-lg p-6">
+                    <div className="flex items-center justify-center space-x-3 mb-4">
+                      <FaPaypal className="text-blue-600 text-2xl" />
+                      <span className="text-xl font-semibold text-blue-600">PayPal Payment</span>
+                    </div>
+                    <p className="text-center text-gray-600 mb-6">
+                      Amount: <span className="font-semibold text-lg">${orderData.pricing.total.toFixed(2)}</span>
+                    </p>
+                    
+                    <PayPalButton
+                      amount={orderData.pricing.total}
+                      currency="USD"
+                      orderData={orderData}
+                      description={`${service.name} - ${service.category}`}
+                      onSuccess={handlePaymentSuccess}
+                      onError={handlePaymentError}
+                      onCancel={handlePaymentCancel}
+                    />
+                    
+                    <div className="flex items-center justify-center space-x-2 text-sm text-gray-500 mt-4">
+                      <FaLock className="text-green-500" />
+                      <span>Secure payment processed by PayPal</span>
+                    </div>
                   </div>
                 </div>
-              </div>
-
-              {/* Submit Button */}
-              <button
-                type="submit"
-                disabled={loading}
-                className={`w-full py-4 px-6 rounded-lg font-semibold text-white transition-colors flex items-center justify-center ${
-                  loading 
-                    ? 'bg-gray-400 cursor-not-allowed' 
-                    : 'bg-blue-600 hover:bg-blue-700'
-                }`}
-              >
-                {loading ? (
-                  <>
-                    <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2"></div>
-                    Processing...
-                  </>
-                ) : (
-                  <>
-                    <FaPaypal className="mr-2" />
-                    Pay with PayPal - ${pricing.total.toFixed(2)}
-                  </>
-                )}
-              </button>
+              )}
             </form>
           </div>
 

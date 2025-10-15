@@ -15,7 +15,8 @@ router.post('/', authenticateUserToken, async (req, res) => {
       serviceId,
       customerInfo,
       projectDetails,
-      pricing
+      pricing,
+      payment
     } = req.body;
 
     // Validate required fields
@@ -90,11 +91,16 @@ router.post('/', authenticateUserToken, async (req, res) => {
         total: total,
         timelineAdjustment: timelineAdjustment
       },
-      payment: {
+      payment: payment ? {
+        method: payment.method || 'paypal',
+        status: payment.status || 'pending',
+        transactionId: payment.transactionId,
+        paidAt: payment.paidAt
+      } : {
         method: 'paypal', // Default to PayPal as per your requirement
         status: 'pending'
       },
-      status: 'pending'
+      status: payment && payment.status === 'completed' ? 'confirmed' : 'pending'
     };
 
     // Create the order
